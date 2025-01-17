@@ -9,94 +9,109 @@ import (
 	"strconv"
 )
 
-type Artist struct {
-	Id           int             `json:"id"`
-	Name         string          `json:"name"`
-	Image        string          `json:"image"`
-	Members      []string        `json:"members"`
-	CreationDate int             `json:"creationDate"`
-	FirstAlbum   string          `json:"firstAlbum"`
-	Relations    json.RawMessage `json:"relations"`
+type APIResponse struct {
+	Artists   string `json:"artists"`
+	Locations string `json:"locations"`
+	Dates     string `json:"dates"`
+	Relations string `json:"relation"`
 }
 
-type Relation struct {
-	DatesLocations map[string][]string `json:"datesLocations"`
+type Artist struct {
+	ID         int      `json:"id"`
+	Name       string   `json:"name"`
+	Image      string   `json:"image"`
+	Members    []string `json:"members"`
+	Creation   int      `json:"creationDate"`
+	FirstAlbum string   `json:"firstAlbum"`
 }
 
 var artists []Artist
 
-func main() {
-	loadArtists("https://groupietrackers.herokuapp.com/api/artists")
-
-	http.HandleFunc("/", welcomePage)
-	http.HandleFunc("/artists", displayArtists)
-	http.HandleFunc("/artist", displayArtistDetails)
-
-	log.Println("Server is running on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
-}
-
-func loadArtists(url string) { //
-	res, err := http.Get(url)
+func APIBase() APIResponse {
+	res, err := http.Get("https://groupietrackers.herokuapp.com/api")
 	if err != nil {
-		log.Fatal("Erreur lors de la récupération de l'API :", err)
+		log.Println("Erreur lors de la récupération de l'API :", err)
+		return APIResponse{}
 	}
 	defer res.Body.Close()
-
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal("Erreur lors de la lecture des données de l'API :", err)
+		log.Println("Erreur lors de la lecture du corps de la réponse :", err)
+		return APIResponse{}
 	}
+	var api APIResponse
+	err = json.Unmarshal(body, &api)
+	if err != nil {
+		log.Println("Erreur lors de la désérialisation de l'API principale :", err)
+		return APIResponse{}
+	}
+	return api
+}
 
+func loadArtists(url string) {
+	res, err := http.Get(url)
+	if err != nil {
+		log.Println("Erreur lors de la récupération des artistes :", err)
+		return
+	}
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Println("Erreur lors de la lecture des artistes :", err)
+		return
+	}
 	err = json.Unmarshal(body, &artists)
 	if err != nil {
-		log.Fatal("Erreur lors de la désérialisation des artistes :", err)
+		log.Println("Erreur lors de la désérialisation des artistes :", err)
+		return
 	}
 }
 
-func welcomePage(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/welcome.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	tmpl.Execute(w, nil)
-}
-
-func displayArtists(w http.ResponseWriter, r *http.Request) {
+func displayArtistsPage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/artists.html")
 	if err != nil {
-		http.Error(w, "Erreur lors du chargement du modèle HTML", http.StatusInternalServerError)
+		log.Println("Erreur lors du chargement du modèle HTML")
+		http.Error(w, "Erreur interne", http.StatusInternalServerError)
 		return
 	}
 	tmpl.Execute(w, artists)
 }
 
-func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
+func displayArtistDetailsPage(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Redirect(w, r, "/error", http.StatusFound)
+		return
+	}
+
 	for _, artist := range artists {
-		if strconv.Itoa(artist.Id) == id {
-			var relations Relation
-			if err := json.Unmarshal(artist.Relations, &relations); err != nil {
-				log.Printf("Relations pour l'artiste %d non structuré, ignoré : %v", artist.Id, err)
-				relations = Relation{DatesLocations: make(map[string][]string)} // Valeur par défaut
-			}
-
-			data := struct {
-				Artist    Artist
-				Relations Relation
-			}{
-				Artist:    artist,
-				Relations: relations,
-			}
-
+		if strconv.Itoa(artist.ID) == id {
 			tmpl, err := template.ParseFiles("templates/artist.html")
 			if err != nil {
-				http.Error(w, "Erreur lors du chargement du modèle HTML", http.StatusInternalServerError)
+				log.Println("Erreur lors du chargement du modèle HTML")
+				http.Error(w, "Erreur interne", http.StatusInternalServerError)
 				return
 			}
-			tmpl.Execute(w, data)
+			tmpl.Execute(w, artist)
 			return
 		}
 	}
-	http.NotFound(w, r)
+
+	http.Redirect(w, r, "/error", http.StatusFound)
+}
+
+func defaultPage(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/artists", http.StatusFound)
+}
+
+func main() {
+	api := APIBase()
+	loadArtists(api.Artists)
+
+	http.HandleFunc("/artists", displayArtistsPage)
+	http.HandleFunc("/artist", displayArtistDetailsPage)
+	http.HandleFunc("/", defaultPage)
+
+	log.Println("Server is running on http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }
