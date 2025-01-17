@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-type Artist struct {
+type Artist struct { //structure qui permet d'afficher les données contenues dans l'API
 	Id           int             `json:"id"`
 	Name         string          `json:"name"`
 	Image        string          `json:"image"`
@@ -19,21 +19,21 @@ type Artist struct {
 	Relations    json.RawMessage `json:"relations"`
 }
 
-type Relation struct {
+type Relation struct { //Structure qui permet d'afficher les lieux et les dates des concerts
 	DatesLocations map[string][]string `json:"datesLocations"`
 }
 
 var artists []Artist
 
 func main() {
-	loadArtists("https://groupietrackers.herokuapp.com/api/artists")
+	loadArtists("https://groupietrackers.herokuapp.com/api/artists") //Permet d'utiliser l'API
 
-	http.HandleFunc("/", welcomePage)
-	http.HandleFunc("/artists", displayArtists)
-	http.HandleFunc("/artist", displayArtistDetails)
+	http.HandleFunc("/", welcomePage)                //Affiche la première page
+	http.HandleFunc("/artists", displayArtists)      //Affiche la page avec tout les groupes
+	http.HandleFunc("/artist", displayArtistDetails) //Affiche les pages de descriptions de chaques groupes
 
-	log.Println("Server is running on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	log.Println("Server is running on http://localhost:8080") //Message dans la console
+	http.ListenAndServe(":8080", nil)                         //Port de la page
 }
 
 func loadArtists(url string) {
