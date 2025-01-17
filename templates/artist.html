@@ -1,21 +1,59 @@
+<!-- artist.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de l'Artiste</title>
+    <title>{{.Artist.Name}} - Groupie Tracker</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>{{.Name}}</h1>
-    <img src="{{.Image}}" alt="Image de {{.Name}}" style="width:300px;height:300px;">
-    <p>Création : {{.Creation}}</p>
-    <p>Premier Album : {{.FirstAlbum}}</p>
-    <h2>Membres :</h2>
-    <ul>
-        {{range .Members}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
-    <a href="/artists">Retour à la liste des artistes</a>
+    <div class="navigation">
+        <a href="/" class="nav-link">Accueil</a>
+        <a href="/artists" class="nav-link">Tous les artistes</a>
+    </div>
+
+    <div class="container">
+        <div class="artist-header">
+            <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="artist-image">
+            <h1 class="artist-name">{{.Artist.Name}}</h1>
+        </div>
+
+        <div class="artist-info">
+            <div class="details">
+                <div class="detail">
+                    <span>Création:</span>
+                    <strong>{{.Artist.CreationDate}}</strong>
+                </div>
+                <div class="detail">
+                    <span>Premier album:</span>
+                    <strong>{{.Artist.FirstAlbum}}</strong>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Membres</h2>
+                <ul class="members-list">
+                    {{range .Artist.Members}}
+                    <li class="member">{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Concerts & Dates</h2>
+                <div class="concerts-grid">
+                    {{range $location, $dates := .Relations.DatesLocations}}
+                    <div class="concert-card">
+                        <h3>{{$location}}</h3>
+                        {{range $dates}}
+                        <p>{{.}}</p>
+                        {{end}}
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

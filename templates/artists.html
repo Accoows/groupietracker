@@ -1,22 +1,28 @@
+<!-- artists.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Artistes</title>
+    <title>Liste des Artistes - Groupie Tracker</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Liste des Artistes</h1>
-    <ul>
+    <a href="/" class="home-link">Accueil</a>
+    <div class="header">
+        <h1>Nos Artistes</h1>
+    </div>
+    <div class="grid">
         {{range .}}
-        <li>
-            <img src="{{.Image}}" alt="Image de {{.Name}}" style="width:100px;height:100px;">
-            <h2>{{.Name}}</h2>
-            <p>Création : {{.Creation}}</p>
-            <p>Premier Album : {{.FirstAlbum}}</p>
-            <a href="/artist?id={{.ID}}">Voir les détails</a>
-        </li>
+        <a href="/artist?id={{.Id}}" class="artist-card">
+            <img src="{{.Image}}" alt="{{.Name}}" class="artist-image">
+            <div class="artist-info">
+                <h2 class="artist-name">{{.Name}}</h2>
+                <p class="artist-details">Création: {{.CreationDate}}</p>
+                <p class="artist-details">Premier album: {{.FirstAlbum}}</p>
+            </div>
+        </a>
         {{end}}
-    </ul>
+    </div>
 </body>
 </html>
