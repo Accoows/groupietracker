@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-type Artist struct { //structure qui permet d'afficher les données contenues dans l'API
+type Artist struct {
 	Id           int             `json:"id"`
 	Name         string          `json:"name"`
 	Image        string          `json:"image"`
@@ -19,24 +19,24 @@ type Artist struct { //structure qui permet d'afficher les données contenues da
 	Relations    json.RawMessage `json:"relations"`
 }
 
-type Relation struct { //Structure qui permet d'afficher les lieux et les dates des concerts
+type Relation struct {
 	DatesLocations map[string][]string `json:"datesLocations"`
 }
 
 var artists []Artist
 
 func main() {
-	loadArtists("https://groupietrackers.herokuapp.com/api/artists") //Permet d'utiliser l'API
+	loadArtists("https://groupietrackers.herokuapp.com/api/artists")
 
-	http.HandleFunc("/", welcomePage)                //Affiche la première page
-	http.HandleFunc("/artists", displayArtists)      //Affiche la page avec tout les groupes
-	http.HandleFunc("/artist", displayArtistDetails) //Affiche les pages de descriptions de chaques groupes
+	http.HandleFunc("/", welcomePage)
+	http.HandleFunc("/artists", displayArtists)
+	http.HandleFunc("/artist", displayArtistDetails)
 
-	log.Println("Server is running on http://localhost:8080") //Message dans la console
-	http.ListenAndServe(":8080", nil)                         //Port de la page
+	log.Println("Server is running on http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }
 
-func loadArtists(url string) {
+func loadArtists(url string) { //
 	res, err := http.Get(url)
 	if err != nil {
 		log.Fatal("Erreur lors de la récupération de l'API :", err)
