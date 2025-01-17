@@ -77,7 +77,8 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 		if strconv.Itoa(artist.Id) == id {
 			var relations Relation
 			if err := json.Unmarshal(artist.Relations, &relations); err != nil {
-				log.Printf("Erreur lors de la désérialisation des relations pour l'artiste %d : %v", artist.Id, err)
+				log.Printf("Relations pour l'artiste %d non structuré, ignoré : %v", artist.Id, err)
+				relations = Relation{DatesLocations: make(map[string][]string)} // Valeur par défaut
 			}
 
 			data := struct {
