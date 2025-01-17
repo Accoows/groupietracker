@@ -30,17 +30,20 @@ var artists []Artist
 func APIBase() APIResponse {
 	res, err := http.Get("https://groupietrackers.herokuapp.com/api")
 	if err != nil {
-		log.Fatal("Erreur lors de la récupération de l'API :", err)
+		log.Println("Erreur lors de la récupération de l'API :", err)
+		return APIResponse{}
 	}
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal("Erreur lors de la lecture du corps de la réponse :", err)
+		log.Println("Erreur lors de la lecture du corps de la réponse :", err)
+		return APIResponse{}
 	}
 	var api APIResponse
 	err = json.Unmarshal(body, &api)
 	if err != nil {
-		log.Fatal("Erreur lors de la désérialisation de l'API principale :", err)
+		log.Println("Erreur lors de la désérialisation de l'API principale :", err)
+		return APIResponse{}
 	}
 	return api
 }
@@ -48,23 +51,27 @@ func APIBase() APIResponse {
 func loadArtists(url string) {
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal("Erreur lors de la récupération des artistes :", err)
+		log.Println("Erreur lors de la récupération des artistes :", err)
+		return
 	}
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatal("Erreur lors de la lecture des artistes :", err)
+		log.Println("Erreur lors de la lecture des artistes :", err)
+		return
 	}
 	err = json.Unmarshal(body, &artists)
 	if err != nil {
-		log.Fatal("Erreur lors de la désérialisation des artistes :", err)
+		log.Println("Erreur lors de la désérialisation des artistes :", err)
+		return
 	}
 }
 
 func displayArtistsPage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/artists.html")
 	if err != nil {
-		http.Error(w, "Erreur lors du chargement du modèle HTML", http.StatusInternalServerError)
+		log.Println("Erreur lors du chargement du modèle HTML")
+		http.Error(w, "Erreur interne", http.StatusInternalServerError)
 		return
 	}
 	tmpl.Execute(w, artists)
@@ -81,7 +88,8 @@ func displayArtistDetailsPage(w http.ResponseWriter, r *http.Request) {
 		if strconv.Itoa(artist.ID) == id {
 			tmpl, err := template.ParseFiles("templates/artist.html")
 			if err != nil {
-				http.Error(w, "Erreur lors du chargement du modèle HTML", http.StatusInternalServerError)
+				log.Println("Erreur lors du chargement du modèle HTML")
+				http.Error(w, "Erreur interne", http.StatusInternalServerError)
 				return
 			}
 			tmpl.Execute(w, artist)
