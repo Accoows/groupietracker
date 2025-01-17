@@ -93,6 +93,16 @@ func loadData(url string, target interface{}) {
 	}
 }
 
+func displayWelcome(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/welcome.html")
+	if err != nil {
+		log.Println("Erreur lors du chargement du modèle HTML de la page d'accueil")
+		http.Error(w, "Erreur interne", http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, nil)
+}
+
 func displayArtists(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/artists.html")
 	if err != nil {
@@ -162,7 +172,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func defaultPage(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/artists", http.StatusFound)
+	http.Redirect(w, r, "/welcome", http.StatusFound)
 }
 
 func main() {
@@ -172,6 +182,10 @@ func main() {
 	loadData(api.Dates, &dates)
 	loadData(api.Relations, &relations)
 
+	fs := http.FileServer(http.Dir("styles"))
+	http.Handle("/styles/", http.StripPrefix("/styles/", fs))
+
+	http.HandleFunc("/welcome", displayWelcome)
 	http.HandleFunc("/artists", displayArtists)
 	http.HandleFunc("/artist", displayArtistDetails)
 	http.HandleFunc("/", defaultPage)

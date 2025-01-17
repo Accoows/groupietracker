@@ -1,43 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de l'Artiste</title>
+    <title>{{.Artist.Name}} - Groupie Tracker</title>
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
-    <h1>{{.Artist.Name}}</h1>
-    <img src="{{.Artist.Image}}" alt="Image de {{.Artist.Name}}" style="width:300px;height:300px;">
-    <p>Date de création : {{.Artist.Creation}}</p>
-    <p>Premier album : {{.Artist.FirstAlbum}}</p>
-    <h2>Membres :</h2>
-    <ul>
-        {{range .Artist.Members}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
+    <div class="navigation">
+        <a href="/artists" class="nav-link">Retour à la liste des artistes</a>
+    </div>
 
-    <h2>Localisations :</h2>
-    <ul>
-        {{range .Locations}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
+    <div class="container">
+        <div class="artist-header">
+            <img src="{{.Artist.Image}}" alt="{{.Artist.Name}}" class="artist-image">
+            <h1 class="artist-name">{{.Artist.Name}}</h1>
+        </div>
 
-    <h2>Dates :</h2>
-    <ul>
-        {{range .Dates}}
-        <li>{{.}}</li>
-        {{end}}
-    </ul>
+        <div class="artist-info">
+            <div class="details">
+                <div class="detail">
+                    <span>Date de création :</span>
+                    <strong>{{.Artist.Creation}}</strong>
+                </div>
+                <div class="detail">
+                    <span>Premier album :</span>
+                    <strong>{{.Artist.FirstAlbum}}</strong>
+                </div>
+            </div>
 
-    <h2>Relations :</h2>
-    <ul>
-        {{range $key, $value := .Relations}}
-        <li>{{ $key }} : {{ $value }}</li>
-        {{end}}
-    </ul>
+            <div class="info-section">
+                <h2 class="info-title">Membres</h2>
+                <ul class="members-list">
+                    {{range .Artist.Members}}
+                    <li class="member">{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
 
-    <a href="/artists">Retour à la liste des artistes</a>
+            <div class="info-section">
+                <h2 class="info-title">Localisations</h2>
+                <ul class="locations-list">
+                    {{range .Locations}}
+                    <li class="location">{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Dates</h2>
+                <ul class="dates-list">
+                    {{range .Dates}}
+                    <li class="date">{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Relations</h2>
+                <ul class="relations-list">
+                    {{range $key, $value := .Relations}}
+                    <li><strong>{{ $key }} :</strong> {{ range $value }}{{.}}, {{end }}</li>
+                    {{end}}
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
