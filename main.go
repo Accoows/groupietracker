@@ -93,8 +93,8 @@ func loadData(url string, target interface{}) {
 	}
 }
 
-func displayWelcome(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/welcome.html")
+func displayHomepage(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/homepage.html")
 	if err != nil {
 		log.Println("Erreur lors du chargement du modèle HTML de la page d'accueil")
 		http.Error(w, "Erreur interne", http.StatusInternalServerError)
@@ -104,7 +104,7 @@ func displayWelcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func displayArtists(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/artists.html")
+	tmpl, err := template.ParseFiles("templates/artistsDisplay.html")
 	if err != nil {
 		log.Println("Erreur lors du chargement du modèle HTML")
 		http.Error(w, "Erreur interne", http.StatusInternalServerError)
@@ -158,7 +158,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 				Relations: artistRelations,
 			}
 
-			tmpl, err := template.ParseFiles("templates/artist.html")
+			tmpl, err := template.ParseFiles("templates/artistInformations.html")
 			if err != nil {
 				log.Println("Erreur lors du chargement du modèle HTML")
 				http.Error(w, "Erreur interne", http.StatusInternalServerError)
@@ -172,7 +172,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 }
 
 func defaultPage(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/welcome", http.StatusFound)
+	http.Redirect(w, r, "/homepage", http.StatusFound)
 }
 
 func main() {
@@ -185,9 +185,9 @@ func main() {
 	fs := http.FileServer(http.Dir("styles"))
 	http.Handle("/styles/", http.StripPrefix("/styles/", fs))
 
-	http.HandleFunc("/welcome", displayWelcome)
-	http.HandleFunc("/artists", displayArtists)
-	http.HandleFunc("/artist", displayArtistDetails)
+	http.HandleFunc("/homepage", displayHomepage)
+	http.HandleFunc("/artistsDisplay", displayArtists)
+	http.HandleFunc("/artistInformations", displayArtistDetails)
 	http.HandleFunc("/", defaultPage)
 
 	log.Println("Server is running on http://localhost:8080")
