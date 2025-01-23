@@ -1,16 +1,14 @@
-<!-- artist.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Artist.Name}} - Groupie Tracker</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
     <div class="navigation">
-        <a href="/" class="nav-link">Accueil</a>
-        <a href="/artists" class="nav-link">Tous les artistes</a>
+        <a href="/artistsDisplay" class="nav-link">Retour à la liste des artistes</a>
     </div>
 
     <div class="container">
@@ -22,11 +20,11 @@
         <div class="artist-info">
             <div class="details">
                 <div class="detail">
-                    <span>Création:</span>
-                    <strong>{{.Artist.CreationDate}}</strong>
+                    <span>Date de création :</span>
+                    <strong>{{.Artist.Creation}}</strong>
                 </div>
                 <div class="detail">
-                    <span>Premier album:</span>
+                    <span>Premier album :</span>
                     <strong>{{.Artist.FirstAlbum}}</strong>
                 </div>
             </div>
@@ -41,17 +39,30 @@
             </div>
 
             <div class="info-section">
-                <h2 class="info-title">Concerts & Dates</h2>
-                <div class="concerts-grid">
-                    {{range $location, $dates := .Relations.DatesLocations}}
-                    <div class="concert-card">
-                        <h3>{{$location}}</h3>
-                        {{range $dates}}
-                        <p>{{.}}</p>
-                        {{end}}
-                    </div>
+                <h2 class="info-title">Localisations</h2>
+                <ul class="locations-list">
+                    {{range .Locations}}
+                    <li class="location">{{.}}</li>
                     {{end}}
-                </div>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Dates</h2>
+                <ul class="dates-list">
+                    {{range .Dates}}
+                    <li class="date">{{.}}</li>
+                    {{end}}
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">Relations</h2>
+                <ul class="relations-list">
+                    {{range $key, $value := .Relations}}
+                    <li><strong>{{ $key }} :</strong> {{ range $value }}{{.}}, {{end }}</li>
+                    {{end}}
+                </ul>
             </div>
         </div>
     </div>

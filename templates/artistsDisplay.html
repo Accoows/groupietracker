@@ -1,11 +1,10 @@
-<!-- artists.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Artistes - Groupie Tracker</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
     <a href="/" class="home-link">Accueil</a>
@@ -14,11 +13,11 @@
     </div>
     <div class="grid">
         {{range .}}
-        <a href="/artist?id={{.Id}}" class="artist-card">
+        <a href="/artistInformations?id={{.ID}}" class="artist-card">
             <img src="{{.Image}}" alt="{{.Name}}" class="artist-image">
             <div class="artist-info">
                 <h2 class="artist-name">{{.Name}}</h2>
-                <p class="artist-details">Création: {{.CreationDate}}</p>
+                <p class="artist-details">Création: {{.Creation}}</p>
                 <p class="artist-details">Premier album: {{.FirstAlbum}}</p>
             </div>
         </a>
