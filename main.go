@@ -93,7 +93,7 @@ func loadData(url string, target interface{}) {
 	}
 }
 
-func displayWelcome(w http.ResponseWriter, r *http.Request) {
+func displayHomepage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/homepage.html")
 	if err != nil {
 		log.Println("Erreur lors du chargement du modèle HTML de la page d'accueil")
@@ -185,7 +185,7 @@ func main() {
 	fs := http.FileServer(http.Dir("styles"))
 	http.Handle("/styles/", http.StripPrefix("/styles/", fs))
 
-	http.HandleFunc("/homepage", displayWelcome)
+	http.HandleFunc("/homepage", displayHomepage)
 	http.HandleFunc("/artistsDisplay", displayArtists)
 	http.HandleFunc("/artistInformations", displayArtistDetails)
 	http.HandleFunc("/", defaultPage)

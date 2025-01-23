@@ -6,7 +6,8 @@
 }
 
 body {
-    background: #f4f4f4;
+    background: #610505;
+    color:white;
 }
 
 /* Welcome page styles */
@@ -17,7 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: linear-gradient(45deg, #1a1a1a, #333);
+    background: linear-gradient(45deg, #880404, #333);
     color: white;
 }
 
