@@ -57,8 +57,8 @@ func APIBase() APIResponse {
 		log.Println("Erreur lors de la récupération de l'API :", err)
 		return APIResponse{}
 	}
-	defer res.Body.Close()
-	body, err := io.ReadAll(res.Body)
+	defer res.Body.Close()            // S'assurer que le corps est fermé après lecture.
+	body, err := io.ReadAll(res.Body) // Lire tout le contenu du corps.
 	if err != nil {
 		log.Println("Erreur lors de la lecture du corps de la réponse :", err)
 		return APIResponse{}
@@ -75,20 +75,17 @@ func APIBase() APIResponse {
 func loadData(url string, target interface{}) {
 	res, err := http.Get(url)
 	if err != nil {
-		log.Printf("Erreur lors de la récupération des données depuis %s : %v", url, err)
 		return
 	}
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Printf("Erreur lors de la lecture des données depuis %s : %v", url, err)
 		return
 	}
 
 	err = json.Unmarshal(body, target)
 	if err != nil {
-		log.Printf("Erreur lors de la désérialisation des données depuis %s : %v", url, err)
 		return
 	}
 }
@@ -96,7 +93,6 @@ func loadData(url string, target interface{}) {
 func displayHomepage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/homepage.html")
 	if err != nil {
-		log.Println("Erreur lors du chargement du modèle HTML de la page d'accueil")
 		http.Error(w, "Erreur interne", http.StatusInternalServerError)
 		return
 	}
@@ -106,8 +102,7 @@ func displayHomepage(w http.ResponseWriter, r *http.Request) {
 func displayArtists(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/artistsDisplay.html")
 	if err != nil {
-		log.Println("Erreur lors du chargement du modèle HTML")
-		http.Error(w, "Erreur interne", http.StatusInternalServerError)
+		http.Error(w, "Erreur interne (templates/artistInformations)", http.StatusInternalServerError)
 		return
 	}
 	tmpl.Execute(w, artists)
@@ -116,7 +111,7 @@ func displayArtists(w http.ResponseWriter, r *http.Request) {
 func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
-		http.Redirect(w, r, "/error", http.StatusFound)
+		http.Error(w, "Erreur interne", http.StatusInternalServerError)
 		return
 	}
 
@@ -160,15 +155,14 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 
 			tmpl, err := template.ParseFiles("templates/artistInformations.html")
 			if err != nil {
-				log.Println("Erreur lors du chargement du modèle HTML")
-				http.Error(w, "Erreur interne", http.StatusInternalServerError)
+				http.Error(w, "Erreur interne (templates/artistInformations)", http.StatusInternalServerError)
 				return
 			}
 			tmpl.Execute(w, data)
 			return
 		}
 	}
-	http.Redirect(w, r, "/error", http.StatusFound)
+	http.Error(w, "Erreur interne (displayArtistDetails)", http.StatusInternalServerError)
 }
 
 func defaultPage(w http.ResponseWriter, r *http.Request) {
