@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"groupietracker/modules" // Import du package models et searchbar
 	"html/template"
 	"io"
 	"log"
@@ -9,69 +10,37 @@ import (
 	"strconv"
 )
 
-type APIResponse struct {
-	Artists   string `json:"artists"`
-	Locations string `json:"locations"`
-	Dates     string `json:"dates"`
-	Relations string `json:"relation"`
-}
+// Variables globales
+var artists []modules.Artist
+var locations modules.LocationData
+var dates modules.DatesData
+var relations modules.RelationData
 
-type Artist struct {
-	ID         int      `json:"id"`
-	Name       string   `json:"name"`
-	Image      string   `json:"image"`
-	Members    []string `json:"members"`
-	Creation   int      `json:"creationDate"`
-	FirstAlbum string   `json:"firstAlbum"`
-}
-
-type LocationData struct {
-	Index []struct {
-		ID        int      `json:"id"`
-		Locations []string `json:"locations"`
-	} `json:"index"`
-}
-
-type DatesData struct {
-	Index []struct {
-		ID    int      `json:"id"`
-		Dates []string `json:"dates"`
-	} `json:"index"`
-}
-
-type RelationData struct {
-	Index []struct {
-		ID        int                 `json:"id"`
-		Relations map[string][]string `json:"datesLocations"`
-	} `json:"index"`
-}
-
-var artists []Artist
-var locations LocationData
-var dates DatesData
-var relations RelationData
-
-func APIBase() APIResponse {
+// APIBase récupère les URL des endpoints depuis l'API principale
+func APIBase() modules.APIResponse {
 	res, err := http.Get("https://groupietrackers.herokuapp.com/api")
 	if err != nil {
 		log.Println("Erreur lors de la récupération de l'API :", err)
-		return APIResponse{}
+		return modules.APIResponse{}
 	}
-	defer res.Body.Close()            // S'assurer que le corps est fermé après lecture.
-	body, err := io.ReadAll(res.Body) // Lire tout le contenu du corps.
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		log.Println("Erreur lors de la lecture du corps de la réponse :", err)
-		return APIResponse{}
+		return modules.APIResponse{}
 	}
-	var api APIResponse
+
+	var api modules.APIResponse
 	err = json.Unmarshal(body, &api)
 	if err != nil {
 		log.Println("Erreur lors de la désérialisation de l'API principale :", err)
-		return APIResponse{}
+		return modules.APIResponse{}
 	}
 	return api
 }
 
+// Charger les données à partir d'un endpoint API
 func loadData(url string, target interface{}) {
 	res, err := http.Get(url)
 	if err != nil {
@@ -100,12 +69,32 @@ func displayHomepage(w http.ResponseWriter, r *http.Request) {
 }
 
 func displayArtists(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("query") // Requête utilisateur
+	var suggestions []modules.Suggestion
+
+	// Si une recherche est effectuée, génère les suggestions
+	if query != "" {
+		suggestions = modules.Search(query, artists, locations, dates)
+	}
+
+	// Structure des données à transmettre au template
+	data := struct {
+		Query       string
+		Suggestions []modules.Suggestion
+		Artists     []modules.Artist
+	}{
+		Query:       query,
+		Suggestions: suggestions,
+		Artists:     artists,
+	}
+
+	// Charger et exécuter le template
 	tmpl, err := template.ParseFiles("templates/artistsDisplay.html")
 	if err != nil {
-		http.Error(w, "Erreur interne (templates/artistInformations)", http.StatusInternalServerError)
+		http.Error(w, "Erreur interne", http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, artists)
+	tmpl.Execute(w, data)
 }
 
 func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +110,6 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 			var artistDates []string
 			var artistRelations map[string][]string
 
-			// Extraire les données de localisations, dates et relations
 			for _, loc := range locations.Index {
 				if loc.ID == artist.ID {
 					artistLocations = loc.Locations
@@ -142,7 +130,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 			}
 
 			data := struct {
-				Artist    Artist
+				Artist    modules.Artist
 				Locations []string
 				Dates     []string
 				Relations map[string][]string
@@ -155,7 +143,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 
 			tmpl, err := template.ParseFiles("templates/artistInformations.html")
 			if err != nil {
-				http.Error(w, "Erreur interne (templates/artistInformations)", http.StatusInternalServerError)
+				http.Error(w, "Erreur interne", http.StatusInternalServerError)
 				return
 			}
 			tmpl.Execute(w, data)
@@ -181,6 +169,12 @@ func main() {
 
 	http.HandleFunc("/homepage", displayHomepage)
 	http.HandleFunc("/artistsDisplay", displayArtists)
+
+	// Intégration de la recherche via searchbar.go
+	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
+		modules.HandleSearch(w, r, artists, locations, dates, relations)
+	})
+
 	http.HandleFunc("/artistInformations", displayArtistDetails)
 	http.HandleFunc("/", defaultPage)
 
