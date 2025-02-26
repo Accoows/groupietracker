@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 type APIResponse struct {
@@ -93,6 +95,51 @@ func loadData(url string, target interface{}) {
 	}
 }
 
+func changeLocationsCaracters(locations []string, i int) string {
+	return strings.ReplaceAll(locations[i], "_", " ")
+}
+
+func monthInString() []string {
+	var monthString []string
+
+	for i := 1; i <= 12; i++ {
+		monthString = append(monthString, time.Month(i).String())
+	}
+
+	return monthString
+}
+
+func stringToInt(stringToReplace string) (int, error) {
+	k, err := strconv.Atoi(stringToReplace)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return k, nil
+}
+
+func changeDatesCaracters(dates []string, i int) string {
+	monthString := monthInString()
+	date := dates[i]
+	dateInParts := strings.Split(dates[i], "-")
+
+	if len(dateInParts) < 3 {
+		return date
+	}
+
+	monthToReplace := dateInParts[1]
+
+	k, err := stringToInt(monthToReplace)
+	if err != nil || k < 1 || k > 12 {
+		return date
+	}
+
+	newDates := strings.Replace(dates[i], monthToReplace, monthString[k-1], 1)
+
+	return strings.ReplaceAll(newDates, "-", " ")
+}
+
 func displayHomepage(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/homepage.html")
 	if err != nil {
@@ -130,12 +177,18 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 			for _, loc := range locations.Index {
 				if loc.ID == artist.ID {
 					artistLocations = loc.Locations
+					for i := 0; i < len(artistLocations); i++ {
+						artistLocations[i] = changeLocationsCaracters(artistLocations, i)
+					}
 					break
 				}
 			}
 			for _, date := range dates.Index {
 				if date.ID == artist.ID {
 					artistDates = date.Dates
+					for i := 0; i < len(artistDates); i++ {
+						artistDates[i] = changeDatesCaracters(artistDates, i)
+					}
 					break
 				}
 			}
@@ -160,7 +213,7 @@ func displayArtistDetails(w http.ResponseWriter, r *http.Request) {
 
 			tmpl, err := template.ParseFiles("templates/artistInformations.html")
 			if err != nil {
-				log.Println("Erreur lors du chargement du modèle HTML")
+				log.Println("Erreur lors du chargement du modèlML")
 				http.Error(w, "Erreur interne", http.StatusInternalServerError)
 				return
 			}
