@@ -1,52 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Artistes - Groupie Tracker</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/errorpopup.js"></script>
 </head>
+
 <body>
-    <a href="/" class="home-link">Accueil</a>
+    <a href="/artists" class="home-link">Accueil</a>
     <div class="header">
         <h1>Nos Artistes</h1>
-        <form method="GET" action="/search" class="search-container">
-            <input 
-                type="text" 
-                name="query" 
-                class="search-input" 
-                placeholder="Rechercher un artiste, un membre, une date..." 
-                value="{{.Query}}"
-            />
+
+        <!-- Barre de recherche -->
+        <form action="/search" method="POST" class="search-container">
+            <input type="text" name="search" class="search-input"
+                placeholder="Rechercher un artiste, un membre, une date..." required />
             <button type="submit" class="search-button">Rechercher</button>
         </form>
     </div>
 
-<!-- Suggestions dynamiques -->
-{{if .Suggestions}}
-<div class="suggestions">
-    <ul class="suggestions-list">
-        {{range .Suggestions}}
-        <li class="suggestion">
-            {{.Name}} <span class="suggestion-type">({{.Type}})</span>
-        </li>
-        {{end}}
-    </ul>
-</div>
-{{end}}
+    <!-- Fond assombri -->
+    <div id="popupOverlay" class="popup-overlay"></div>
 
-<!-- Liste des artistes -->
-<div class="grid">
-    {{range .Artists}}
-    <a href="/artistInformations?id={{.ID}}" class="artist-card">
-        <img src="{{.Image}}" alt="{{.Name}}" class="artist-image">
-        <div class="artist-info">
-            <h2 class="artist-name">{{.Name}}</h2>
-            <p class="artist-details">Création : {{.Creation}}</p>
-            <p class="artist-details">Premier album : {{.FirstAlbum}}</p>
-        </div>
-    </a>
-    {{end}}
-</div>
+    <!-- Pop-up d'erreur -->
+    {{ if .Incorrect }}
+    <div id="errorPopup" class="popup">
+        <p>Aucun résultat trouvé pour votre recherche !</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+    {{ end }}
+
+    <!-- Liste des artistes (Résultats de recherche ou liste complète) -->
+    <div class="grid">
+        {{ if .Search.Artists }}
+        {{ range .Search.Artists }}
+        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+            <div class="artist-info">
+                <h2 class="artist-name">{{ .Name }}</h2>
+                <p class="artist-details">Création : {{ .CreationDate }}</p>
+                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
+            </div>
+        </button>
+        {{ end }}
+        {{ else }}
+        {{ range .General.Artists }}
+        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+            <div class="artist-info">
+                <h2 class="artist-name">{{ .Name }}</h2>
+                <p class="artist-details">Création : {{ .CreationDate }}</p>
+                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
+            </div>
+        </button>
+        {{ end }}
+        {{ end }}
+    </div>
 </body>
+
 </html>
