@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur {{.}}</title>
+    <link rel="stylesheet" href="/static/css/errorstyle.css">
+    <link rel="shortcut icon" href="/static/img/ico.png" type="image/x-icon">
+</head>
+<body>
+    <div class="hero">
+        <h1 class="errnum">Erreur {{.}}</h1>
+        
+        {{ if eq . 404 }}
+        <p class="description">Oops... La page demandée n'existe pas.</p>
+        {{ else if eq . 405 }}
+        <p class="description">Méthode non autorisée. Vous ne pouvez pas utiliser cette méthode ici.</p>
+        {{ else if eq . 400 }}
+        <p class="description">Requête incorrecte. Vérifiez votre saisie et réessayez.</p>
+        {{ else if eq . 500 }}
+        <p class="description">Le serveur a rencontré une erreur. Ce n'est pas votre faute.</p>
+        {{ else }}
+        <p class="description">Une erreur inattendue s'est produite.</p>
+        {{end}}
+
+        <a href="/artists" class="cta-button">Retour à l'accueil</a>
+    </div>
+</body>
+</html>

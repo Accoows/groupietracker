@@ -1,0 +1,60 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* General body style */
+body {
+    background: linear-gradient(45deg, rgb(45, 45, 45), #717171);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Main container */
+.hero {
+    max-width: 600px;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Error title (404, 500, etc.) */
+.errnum {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #e74c3c;
+    text-shadow: 2px 2px 8px rgba(231, 76, 60, 0.5);
+    margin-bottom: 1rem;
+}
+
+/* Error description */
+.description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Return button */
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.cta-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
