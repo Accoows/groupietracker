@@ -5,34 +5,34 @@ import (
 	"strings"
 )
 
-// SearchArtist - Recherche un artiste en fonction d'un mot-clé
+// SearchArtist - Search for an artist based on a keyword
 func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 	var res []Artist
 
-	// Recherche par date de création
+	// Search by creation date
 	a, atoiErr := strconv.Atoi(search)
-	if atoiErr == nil { // Recherche réussie
+	if atoiErr == nil { // Successful search
 		for _, art := range artistsData.Artists {
-			if art.CreationDate == a { // Parcours les artistes et compare les dates de création
+			if art.CreationDate == a { // Iterate through artists and compare creation dates
 				res = append(res, art)
 			}
 		}
 	}
 
-	// Recherche par nom de l’artiste
+	// Search by artist name
 	for _, art := range artistsData.Artists {
 		if strings.Contains(strings.ToLower(art.Name), strings.ToLower(search)) {
 			res = append(res, art)
 			continue
 		}
 
-		// Recherche par premier album
+		// Search by first album
 		if strings.Contains(strings.ToLower(art.FirstAlbum), strings.ToLower(search)) {
 			res = append(res, art)
 			continue
 		}
 
-		// Recherche par membres
+		// Search by members
 		for _, member := range art.Members {
 			if strings.Contains(strings.ToLower(member), strings.ToLower(search)) {
 				res = append(res, art)
@@ -40,10 +40,10 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 			}
 		}
 
-		// Recherche par dates de concerts dans Relations (DatesLocations)
+		// Search by concert dates in Relations (DatesLocations)
 		for _, dates := range art.DatesLocations {
 			for _, date := range dates {
-				if strings.Contains(date, search) { // Vérifie si la date saisie correspond
+				if strings.Contains(date, search) { // Check if the entered date matches
 					res = append(res, art)
 					break
 				}
@@ -51,18 +51,18 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 		}
 	}
 
-	// Supprimer les doublons
+	// Remove duplicates
 	res = RemoveDuplicates(res)
 	return res, nil
 }
 
-// RemoveDuplicates - Supprime les doublons dans la liste des résultats
+// RemoveDuplicates - Remove duplicates from the result list
 func RemoveDuplicates(artists []Artist) []Artist {
 	seen := make(map[int]bool)
 	var uniqueArtists []Artist
 
 	for _, art := range artists {
-		if !seen[art.ID] { // Vérifie si l'ID de l'artiste est déjà présent sinon il le rajoute
+		if !seen[art.ID] { // Check if the artist's ID is already present, otherwise add it
 			seen[art.ID] = true
 			uniqueArtists = append(uniqueArtists, art)
 		}

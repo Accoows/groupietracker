@@ -2,7 +2,7 @@ package modules
 
 import "sync"
 
-// Artist - Structure des données des artistes
+// Artist - Structure of artist data
 type Artist struct {
 	ID             int      `json:"id"`
 	Name           string   `json:"name"`
@@ -13,7 +13,7 @@ type Artist struct {
 	DatesLocations map[string][]string
 }
 
-// Relations - Structure des relations de concerts
+// Relations - Structure of concert relations
 type Relations struct {
 	Index []struct {
 		ID             int                 `json:"id"`
@@ -21,7 +21,7 @@ type Relations struct {
 	} `json:"index"`
 }
 
-// Structure général des données
+// General structure of data
 type General struct {
 	Artists []Artist
 }
@@ -32,7 +32,7 @@ type AllData struct {
 	Incorrect bool
 }
 
-// Système pour évincer les problèmes de concurrence
+// System to avoid concurrency issues
 type SafeCounter struct {
 	mu     sync.Mutex
 	values map[string]int
