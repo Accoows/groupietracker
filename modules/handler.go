@@ -158,9 +158,5 @@ func ErrorHandle(ErrorStatus int, w http.ResponseWriter, errC ...interface{}) {
 		log.Println(val) // ON affiche les erreurs dans la console (à supprimer plus tard pour éviter le spam ou autre)
 	}
 	w.WriteHeader(ErrorStatus)
-	if len(errC) != 2 {
-		tpl.ExecuteTemplate(w, "errors.html", ErrorStatus)
-	} else {
-		tpl.ExecuteTemplate(w, "errors.html", ErrorStatus)
-	}
+	tpl.ExecuteTemplate(w, "errors.html", ErrorStatus)
 }
