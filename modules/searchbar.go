@@ -39,6 +39,16 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 				break
 			}
 		}
+
+		// Recherche par dates de concerts dans Relations (DatesLocations)
+		for _, dates := range art.DatesLocations {
+			for _, date := range dates {
+				if strings.Contains(date, search) { // Vérifie si la date saisie correspond
+					res = append(res, art)
+					break
+				}
+			}
+		}
 	}
 
 	// Supprimer les doublons
