@@ -215,9 +215,9 @@ body {
 }
 
 
-/* Styles pour la pop-up d'erreur */
+/* Error popup styles */
 .popup {
-    display: none; /* Cachée par défaut */
+    display: none; /* Hidden by default */
     position: fixed;
     top: 50%;
     left: 50%;
@@ -254,7 +254,7 @@ body {
     background: #c0392b;
 }
 
-/* Effet d'apparition */
+/* Fade-in effect */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -266,7 +266,7 @@ body {
     }
 }
 
-/* Ajout d'un fond assombri */
+/* Darkened background overlay */
 .popup-overlay {
     display: none;
     position: fixed;
