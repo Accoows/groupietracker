@@ -48,12 +48,8 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 	API.Incorrect = false
 
-	err = tpl.ExecuteTemplate(w, "homepage.html", API) // Démarrage de la page d'accueil
-	if err != nil {
-		tpl.ExecuteTemplate(w, "errors.html", http.StatusInternalServerError)
-		if err != nil {
-			ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
-		}
+	if err = tpl.ExecuteTemplate(w, "homepage.html", API); err != nil { // Démarrage de la page d'accueil
+		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
@@ -71,12 +67,8 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	API.Search = API.General
 	API.Incorrect = false
 
-	err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API) // Démarrage de la page principale
-	if err != nil {
-		tpl.ExecuteTemplate(w, "errors.html", http.StatusInternalServerError)
-		if err != nil {
-			ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
-		}
+	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil { // Démarrage de la page principale
+		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
@@ -112,12 +104,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API) // Démarrage de la page de recherche
-	if err != nil {
-		tpl.ExecuteTemplate(w, "errors.html", http.StatusInternalServerError)
-		if err != nil {
-			ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
-		}
+	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil { // Démarrage de la page de recherche
+		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
@@ -143,12 +131,9 @@ func ArtistPage(w http.ResponseWriter, r *http.Request) {
 	info := &Info{
 		ArtistID: API.General.Artists[id-1], // On récupère les informations de l'artiste
 	} // On retire 1 pour éviter les erreurs de décalage entre Go et l'ID de l'artiste
-	err = tpl.ExecuteTemplate(w, "artistInformations.html", info) // Démarrage de la page de recherche
-	if err != nil {
-		tpl.ExecuteTemplate(w, "errors.html", http.StatusInternalServerError)
-		if err != nil {
-			ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
-		}
+
+	if err = tpl.ExecuteTemplate(w, "artistInformations.html", info); err != nil { // Démarrage de la page de recherche
+		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
