@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Artistes - Groupie Tracker</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/errorpopup.js"></script>
 </head>
+
 <body>
-    <a href="/" class="home-link">Accueil</a>
+    <a href="/artists" class="home-link">Accueil</a>
     <div class="header">
         <h1>Nos Artistes</h1>
+
+        <!-- Barre de recherche -->
+        <form action="/search" method="POST" class="search-container">
+            <input type="text" name="search" class="search-input"
+                placeholder="Rechercher un artiste, un membre, une date..." required />
+            <button type="submit" class="search-button">Rechercher</button>
+        </form>
     </div>
+
+    <!-- Fond assombri -->
+    <div id="popupOverlay" class="popup-overlay"></div>
+
+    <!-- Pop-up d'erreur -->
+    {{ if .Incorrect }}
+    <div id="errorPopup" class="popup">
+        <p>Aucun résultat trouvé pour votre recherche !</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+    {{ end }}
+
+    <!-- Liste des artistes (Résultats de recherche ou liste complète) -->
     <div class="grid">
-        {{range .}}
-        <a href="/artistInformations?id={{.ID}}" class="artist-card">
-            <img src="{{.Image}}" alt="{{.Name}}" class="artist-image">
+        {{ if .Search.Artists }}
+        {{ range .Search.Artists }}
+        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
             <div class="artist-info">
-                <h2 class="artist-name">{{.Name}}</h2>
-                <p class="artist-details">Création: {{.Creation}}</p>
-                <p class="artist-details">Premier album: {{.FirstAlbum}}</p>
+                <h2 class="artist-name">{{ .Name }}</h2>
+                <p class="artist-details">Création : {{ .CreationDate }}</p>
+                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
             </div>
-        </a>
-        {{end}}
+        </button>
+        {{ end }}
+        {{ else }}
+        {{ range .General.Artists }}
+        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+            <div class="artist-info">
+                <h2 class="artist-name">{{ .Name }}</h2>
+                <p class="artist-details">Création : {{ .CreationDate }}</p>
+                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
+            </div>
+        </button>
+        {{ end }}
+        {{ end }}
     </div>
 </body>
+
 </html>
