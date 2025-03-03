@@ -49,6 +49,14 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 				}
 			}
 		}
+
+		// Search by city in Relations (DatesLocations)
+		for city := range art.DatesLocations {
+			if strings.Contains(strings.ToLower(city), strings.ToLower(search)) { // Check if the city matches
+				res = append(res, art)
+				break
+			}
+		}
 	}
 
 	// Remove duplicates
