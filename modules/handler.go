@@ -11,6 +11,10 @@ import (
 var API AllData            // Variable globale pour les données de l'API
 var tpl *template.Template // Template pour les pages HTML
 var err error
+var artists []Artist
+var locations LocationData
+var dates DatesData
+var relations Relations
 
 type Info struct {
 	ArtistID interface{} // Stock les informations de l'artiste concerné
@@ -23,8 +27,7 @@ func init() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	Locations := LocationData{}
-	Dates := DatesData{}
+
 	Relation := Relations{}
 	relation := ApiRequest("https://groupietrackers.herokuapp.com/api/relation") // Récupération la relation des artistes
 	err = json.Unmarshal(relation, &Relation)                                    // Décode les données de la relation
@@ -33,7 +36,7 @@ func init() {
 		return
 	}
 	for i := range API.General.Artists {
-		LoadArtistInfos(&API.General.Artists[i], Relation, Locations, Dates) // Association des relations aux artistes
+		LoadArtistInfos(&API.General.Artists[i], Relation) // Association des relations aux artistes
 	}
 }
 
@@ -130,6 +133,7 @@ func ArtistPage(w http.ResponseWriter, r *http.Request) {
 		ErrorHandle(http.StatusMethodNotAllowed, w, "405 Method Not Allowed")
 		return
 	}
+
 	info := &Info{
 		ArtistID: API.General.Artists[id-1], // On récupère les informations de l'artiste
 	} // On retire 1 pour éviter les erreurs de décalage entre Go et l'ID de l'artiste

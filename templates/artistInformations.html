@@ -8,8 +8,10 @@
 </head>
 <body>
     <div class="navigation">
-        <a href="/artists" class="nav-link">Retour à la liste des artistes</a>
+        <a href="/artists" class="back-button">Back</a>
     </div>
+    
+    
 
     <div class="container">
         <div class="artist-header">
@@ -20,17 +22,17 @@
         <div class="artist-info">
             <div class="details">
                 <div class="detail">
-                    <span>Date de création :</span>
+                    <span>Creation date :</span>
                     <strong>{{.ArtistID.CreationDate}}</strong>
                 </div>
                 <div class="detail">
-                    <span>Premier album :</span>
+                    <span>First album :</span>
                     <strong>{{.ArtistID.FirstAlbum}}</strong>
                 </div>
             </div>
 
             <div class="info-section">
-                <h2 class="info-title">Membres</h2>
+                <h2 class="info-title">Members</h2>
                 <ul class="members-list">
                     {{range .ArtistID.Members}}
                     <li class="member">{{.}}</li>
@@ -39,7 +41,7 @@
             </div>
 
             <div class="info-section">
-                <h2 class="info-title">Dates et Lieux</h2>
+                <h2 class="info-title">Relations</h2>
                 <ul class="dates-list">
                     {{range $key, $value := .ArtistID.DatesLocations}}
                     <li><strong>{{ $key }} :</strong> {{ range $value }}{{.}}, {{end }}</li>

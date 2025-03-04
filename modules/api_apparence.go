@@ -85,3 +85,22 @@ func changeDatesCaracters(dates []string, i int) string {
 	/* The new date is returned. The hyphen is replaced with spaces in the new string (with the month in letter and in lowercase) using strings.ReplaceAll */
 	return strings.ReplaceAll(newDates, "-", " ")
 }
+
+func changeRelationCaracters(relation map[string][]string) map[string][]string {
+	newRelations := make(map[string][]string)
+	newKey := ""
+	for key, values := range relation {
+		keyToReplace := []string{key}
+		for i := 0; i < len(keyToReplace); i++ {
+			keyToReplace[i] = changeLocationsCaracters(keyToReplace, i)
+			newKey = string(keyToReplace[i])
+		}
+		newValues := make([]string, len(values))
+		for i := 0; i < len(values); i++ {
+			newValues[i] = changeDatesCaracters(values, i)
+		}
+
+		newRelations[newKey] = newValues
+	}
+	return newRelations
+}

@@ -10,8 +10,6 @@ type Artist struct {
 	Members        []string `json:"members"`
 	CreationDate   int      `json:"creationDate"`
 	FirstAlbum     string   `json:"firstAlbum"`
-	Locations      []string
-	Dates          []string
 	DatesLocations map[string][]string
 }
 
@@ -39,7 +37,9 @@ type Relations struct {
 
 // Structure général des données
 type General struct {
-	Artists []Artist
+	Artists   []Artist
+	Dates     []DatesData
+	Locations []LocationData
 }
 
 type AllData struct {
