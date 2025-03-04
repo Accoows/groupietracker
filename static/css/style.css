@@ -117,26 +117,33 @@ body { /* background de la page  */
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
 }
 
-.artist-header { /* en tête de l'artiste */
+.artist-header {
     position: relative;
     height: 300px;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+    background: rgb(55, 55, 55); /* Fond blanc */
+    display: flex;
+    align-items: center;
+    padding-left: 200px; /* Espace entre le bord gauche et l'image */
 }
 
 .artist-header .artist-image {
-    width: 100%;
-    height: 100%;
+    width: 200px; /* Taille de l'image */
+    height: 200px;
+    background-color: black; /* Fond noir */
     object-fit: cover;
+    border-radius: 10px; /* Coins arrondis */
+    margin-right: 20px; /* Espace entre l'image et le titre */
 }
 
 .artist-header .artist-name {
-    position: absolute;
-    bottom: 2rem;
-    left: 2rem;
-    color: white;
+    color: rgb(255, 255, 255); /* Texte en noir */
+    font-family: 'Helvetica', sans-serif;
     font-size: 2.5rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: rgb(255, 255, 255);
+    padding-left: 150px;
 }
+
+
 
 .artist-info {
     padding: 2rem;
@@ -320,7 +327,7 @@ body { /* background de la page  */
     padding: 20px;
     width: 300px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease-in-out;
