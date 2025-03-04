@@ -13,6 +13,20 @@ type Artist struct {
 	DatesLocations map[string][]string
 }
 
+type LocationData struct  {
+	Index []struct {
+		ID        int      `json:"id"`
+		Locations []string `json:"locations"`
+	} `json:"index"`
+}
+
+type DatesData struct {
+	Index []struct {
+		ID    int      `json:"id"`
+		Dates []string `json:"dates"`
+	} `json:"index"`
+}
+
 // Relations - Structure of concert relations
 type Relations struct {
 	Index []struct {
@@ -20,6 +34,7 @@ type Relations struct {
 		DatesLocations map[string][]string `json:"datesLocations"`
 	} `json:"index"`
 }
+
 
 // General structure of data
 type General struct {

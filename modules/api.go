@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+=======
 // GetAPI - Merge JSON every 5 minutes
 func (c *SafeCounter) GetAPI() {
 	c.mu.Lock()
@@ -52,7 +53,8 @@ func ApiRequest(url string) []byte { // Retrieve data from the API
 func LoadArtistInfos(art *Artist, relation Relations) {
 	for _, val := range relation.Index {
 		if art.ID == val.ID {
-			art.DatesLocations = val.DatesLocations // Update relations if the ID matches
+			newDatesLocations := changeRelationCaracters(val.DatesLocations)
+			art.DatesLocations = newDatesLocations // Met à jour les relations si l'ID correspond
 		}
 	}
 }
