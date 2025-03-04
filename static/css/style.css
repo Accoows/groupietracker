@@ -382,3 +382,20 @@ body {
     background: #c0392b;
     transform: scale(1.05);
 }
+
+/* Explore button */
+.explore-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.explore-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
