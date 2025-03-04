@@ -23,6 +23,7 @@ func init() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 	Relation := Relations{}
 	relation := ApiRequest("https://groupietrackers.herokuapp.com/api/relation") // Retrieve artist relations
 	err = json.Unmarshal(relation, &Relation)                                    // Decode relation data

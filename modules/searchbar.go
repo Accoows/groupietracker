@@ -58,8 +58,6 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 			}
 		}
 	}
-
-	// Remove duplicates
 	res = RemoveDuplicates(res)
 	return res, nil
 }
