@@ -378,3 +378,20 @@ body { /* background de la page  */
     background: rgba(0, 0, 0, 0.4);
     z-index: 999;
 }   
+
+/* back to artist button, taking the same class ass other button didnt work */
+.back-button { 
+    padding: 0.6rem 1.1rem;
+    font-size: 1.3rem;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+    display: inline-block;
+}
+
+.back-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
