@@ -4,21 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Artistes - Groupie Tracker</title>
+    <title>Artists list - Groupie Tracker</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="/static/js/errorpopup.js"></script>
 </head>
 
 <body>
-    <a href="/" class="home-link">Accueil</a>
+    <a href="/" class="home-link">Home</a>
     <div class="header">
-        <h1>Nos Artistes</h1>
+        <h1>Artists</h1>
 
         <!-- Barre de recherche -->
         <form action="/search" method="POST" class="search-container">
             <input type="text" name="search" class="search-input"
-                placeholder="Rechercher un artiste, un membre, une date..." required />
-            <button type="submit" class="search-button">Rechercher</button>
+                placeholder="Search an artist, an album, a concert date..." required />
+            <button type="submit" class="search-button">Search</button>
         </form>
     </div>
 
@@ -28,7 +28,7 @@
     <!-- Pop-up d'erreur -->
     {{ if .Incorrect }}
     <div id="errorPopup" class="popup">
-        <p>Aucun résultat trouvé pour votre recherche !</p>
+        <p>No resuls found</p>
         <button onclick="closePopup()">OK</button>
     </div>
     {{ end }}
@@ -41,8 +41,8 @@
             <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
             <div class="artist-info">
                 <h2 class="artist-name">{{ .Name }}</h2>
-                <p class="artist-details">Création : {{ .CreationDate }}</p>
-                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
+                <p class="artist-details">Creation : {{ .CreationDate }}</p>
+                <p class="artist-details">First album : {{ .FirstAlbum }}</p>
             </div>
         </button>
         {{ end }}
@@ -52,8 +52,8 @@
             <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
             <div class="artist-info">
                 <h2 class="artist-name">{{ .Name }}</h2>
-                <p class="artist-details">Création : {{ .CreationDate }}</p>
-                <p class="artist-details">Premier album : {{ .FirstAlbum }}</p>
+                <p class="artist-details">Creation : {{ .CreationDate }}</p>
+                <p class="artist-details">First album : {{ .FirstAlbum }}</p>
             </div>
         </button>
         {{ end }}

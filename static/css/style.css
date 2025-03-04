@@ -1,16 +1,16 @@
-* {
+* { /* style généraux */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif;  /* Définit la police par défaut pour tous les éléments */
 }
 
-body {
-    background: rgb(45, 45, 45);
+body { /* background de la page  */
+    background: rgb(45, 45, 45); 
 }
 
-/* Welcome page styles */
-.hero {
+
+.hero { /* page d'accueil */    
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -21,21 +21,36 @@ body {
     color: white;
 }
 
-.hero h1 {
+.hero h1 { /* titre principal */
     font-size: 4rem;
     margin-bottom: 2rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-.description {
+.description { /* je pense que c'est la description ? */
     font-size: 1.2rem;
     max-width: 600px;
     margin-bottom: 3rem;
     line-height: 1.6;
 }
 
-/* Artists page styles */
-.header {
+.cta-button { /* bouton d'appel */
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.cta-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+
+.header { /* page d'artiste */
     text-align: center;
     margin-bottom: 3rem;
     padding-top: 2rem;
@@ -47,7 +62,7 @@ body {
     margin-bottom: 1rem;
 }
 
-.grid {
+.grid { /* affiche les artistes en grille */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
@@ -56,7 +71,7 @@ body {
     padding: 2rem;
 }
 
-.artist-card {
+.artist-card { /* carte d'artiste */ 
     background: white;
     border-radius: 10px;
     overflow: hidden;
@@ -66,11 +81,11 @@ body {
     color: inherit;
 }
 
-.artist-card:hover {
+.artist-card:hover { /* hover */
     transform: translateY(-5px);
 }
 
-.artist-image {
+.artist-image { 
     width: 100%;
     height: 250px;
     object-fit: cover;
@@ -84,18 +99,16 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    text-align: left;
     color: #333;
 }
 
 .artist-details {
     font-size: 0.9rem;
-    text-align: left;
     color: #666;
 }
 
-/* Artist detail page styles */
-.container {
+
+.container { /* conteneur */
     max-width: 1000px;
     margin: 2rem auto;
     background: white;
@@ -104,7 +117,7 @@ body {
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
 }
 
-.artist-header {
+.artist-header { /* en tête de l'artiste */
     position: relative;
     height: 300px;
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
@@ -176,7 +189,7 @@ body {
     z-index: 1000;
 }
 
-.nav-link {
+.nav-link { /* lien de naviguation */
     padding: 0.5rem 1rem;
     background: #333;
     color: white;
@@ -202,7 +215,7 @@ body {
     color: #666;
 }
 
-.home-link {
+.home-link { /* bouton pour revenir de l'accueil */
     position: fixed;
     top: 1rem;
     left: 1rem;
@@ -213,8 +226,89 @@ body {
     border-radius: 5px;
     z-index: 1000;
 }
+/* Style global de la barre de recherche */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 700px; /* Allongement de la barre de recherche */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
+/* Input de la barre de recherche */
+.search-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 25px;
+    outline: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
 
+.search-input::placeholder {
+    color: #ddd;
+}
+
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.5); /* Accentuation de l'effet lors du focus */
+}
+
+/* Bouton rechercher */
+.search-button {
+    position: absolute;
+    right: 0;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search-button:hover {
+    background: #c0392b;
+}
+
+.search-button:focus {
+    outline: none;
+}
+
+/* Bouton Accueil */
+.home-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1.5rem; /* Agrandissement du padding pour ressembler au bouton rechercher */
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px; /* Border-radius arrondi pour correspondre au style */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre similaire au bouton de recherche */
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.2rem;
+    z-index: 1000;
+}
+
+.home-link:hover {
+    background: #c0392b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombre plus marquée au survol */
+}
+
+.home-link:focus {
+    outline: none;
+}
 /* Error popup styles */
 .popup {
     display: none; /* Hidden by default */
@@ -226,7 +320,7 @@ body {
     padding: 20px;
     width: 300px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     text-align: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease-in-out;
@@ -276,4 +370,4 @@ body {
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
     z-index: 999;
-}
+}   
