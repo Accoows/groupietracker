@@ -11,10 +11,6 @@ import (
 var API AllData            // Variable globale pour les données de l'API
 var tpl *template.Template // Template pour les pages HTML
 var err error
-var artists []Artist
-var locations LocationData
-var dates DatesData
-var relations Relations
 
 type Info struct {
 	ArtistID interface{} // Stock les informations de l'artiste concerné
