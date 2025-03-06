@@ -37,8 +37,9 @@ type Relations struct {
 
 // Filters - Stores active filters
 type Filters struct {
-	CD  CreationDate
-	FAD FirstAlbumDate
+	CD   CreationDate
+	FAD  FirstAlbumDate
+	NBOM NumberOfMembers
 }
 
 // CreationDate - Structure to filter by creation date
@@ -47,8 +48,14 @@ type CreationDate struct {
 	To   string
 }
 
-// FirstAlbumDate - Structure to filter by first album date (under construction)
+// FirstAlbumDate - Structure to filter by first album date
 type FirstAlbumDate struct {
+	From string
+	To   string
+}
+
+// NumberOfMembers - Structure to filter by number of members
+type NumberOfMembers struct {
 	From string
 	To   string
 }

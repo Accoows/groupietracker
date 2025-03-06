@@ -49,6 +49,13 @@
                 <label for="toFAD">To:</label>
                 <input type="number" name="toFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.To }}">
             </div>
+            <div>
+                <h3>Filter by Number of Members</h3>
+                <label for="fromNBOM">From:</label>
+                <input type="number" name="fromNBOM" min="1" max="8" placeholder="Min" value="{{ .Filters.NBOM.From }}">
+                <label for="toNBOM">To:</label>
+                <input type="number" name="toNBOM" min="1" max="8" placeholder="Max" value="{{ .Filters.NBOM.To }}">
+            </div>
             <button type="submit" class="filter-button">Apply Filter</button>
         </form>
     </div>

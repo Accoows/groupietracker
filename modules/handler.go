@@ -96,12 +96,16 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	toCreation := r.FormValue("toCreation")     // Filter: creation date (end)
 	fromFAD := r.FormValue("fromFAD")           // Filter: first album date (start)
 	toFAD := r.FormValue("toFAD")               // Filter: first album date (end)
+	fromNBOM := r.FormValue("fromNBOM")         // Filter: minimum number of members
+	toNBOM := r.FormValue("toNBOM")             // Filter: maximum number of members
 
 	// Convert dates to numbers
 	fromCDYear, errFromCD := strconv.Atoi(fromCreation)
 	toCDYear, errToCD := strconv.Atoi(toCreation)
 	fromFADYear, errFromFAD := strconv.Atoi(fromFAD)
 	toFADYear, errToFAD := strconv.Atoi(toFAD)
+	fromNBOMVal, errFromNBOM := strconv.Atoi(fromNBOM)
+	toNBOMVal, errToNBOM := strconv.Atoi(toNBOM)
 
 	if errFromCD != nil {
 		fromCDYear = 1900
@@ -115,9 +119,17 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	if errToFAD != nil {
 		toFADYear = 2024
 	}
+	// Valeurs par défaut si vide
+	if errFromNBOM != nil {
+		fromNBOMVal = 1 // Minimum 1 membre
+	}
+	if errToNBOM != nil {
+		toNBOMVal = 8 // Valeur élevée pour inclure tout le monde
+	}
 
 	log.Println("[CD] Filtering - Years:", fromCDYear, toCDYear)
 	log.Println("[FAD] Filtering - Years:", fromFADYear, toFADYear)
+	log.Println("[NBOM] Filtering - Number:", fromNBOM, toNBOMVal)
 
 	// Initialize filtered artists
 	var filteredArtists []Artist
@@ -148,6 +160,18 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		filteredArtists = tempArtists // Update the list with the applied filter
 	}
 
+	// Apply the number of members filter if a value is provided
+	if fromNBOMVal > 0 || toNBOMVal > 10 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			numMembers := len(artist.Members)
+			if numMembers >= fromNBOMVal && numMembers <= toNBOMVal {
+				tempArtists = append(tempArtists, artist)
+			}
+		}
+		filteredArtists = tempArtists // Mise à jour de la liste filtrée
+	}
+
 	log.Println("Artists after filtering (Creation + First Album):", len(filteredArtists))
 
 	// Apply keyword search if a term is entered
@@ -172,6 +196,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	API.Filters.CD.To = toCreation
 	API.Filters.FAD.From = fromFAD
 	API.Filters.FAD.To = toFAD
+	API.Filters.NBOM.From = fromNBOM
+	API.Filters.NBOM.To = toNBOM
 
 	// Handle error display
 	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
