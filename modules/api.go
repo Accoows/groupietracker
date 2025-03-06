@@ -51,6 +51,10 @@ func ApiRequest(url string) []byte { // Récupération des données de l'API
 }
 
 func LoadArtistInfos(art *Artist, relation Relations) {
+
+	artistFirstAlbum := changeDatesCaractersString(art.FirstAlbum)
+	art.FirstAlbum = artistFirstAlbum
+
 	for _, val := range relation.Index {
 		if art.ID == val.ID {
 			newDatesLocations := changeRelationCaracters(val.DatesLocations)

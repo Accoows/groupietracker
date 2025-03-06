@@ -51,8 +51,8 @@ func stringToInt(stringToReplace string) (int, error) {
 function to modify the apparence of the dates from the api.
 The month are wrote in letters and the first letter are now in lowercase. The hyphen are now spaces.
 */
-func changeDatesCaracters(dates []string, i int) string {
-	monthString := monthInString()              // The month array
+func changeDatesCaractersArray(dates []string, i int) string {
+	/*monthString := monthInString()              // The month array
 	date := dates[i]                            // The date were modifiying
 	dateInParts := strings.Split(dates[i], "-") // strings.Split allows to split each part of the date using the hyphen
 	newDates := ""
@@ -70,7 +70,43 @@ func changeDatesCaracters(dates []string, i int) string {
 
 	/* strings.Replace allows to replace in dates[i] the month in number by the month in letters. k-1 is used because the array start at 0.
 	And to make sure that the only the month number change the replacement is done only one time. */
-	letterMonth := strings.Replace(dates[i], monthToReplace, monthString[k-1], 1)
+	/*letterMonth := strings.Replace(dates[i], monthToReplace, monthString[k-1], 1)
+
+	/* letterMonth is parcoured to put the month in lowercase */
+	/*capitalizedDates := []rune(letterMonth)
+	for j := 0; j < len(capitalizedDates); j++ {
+		if (capitalizedDates[j] >= 'A') && (capitalizedDates[j] <= 'Z') {
+			capitalizedDates[j] = capitalizedDates[j] + 32 // a is placed 32 number after the A in the ascii table
+			newDates += string(capitalizedDates[j])        // the new letter is add in a string
+		} else {
+			newDates += string(capitalizedDates[j]) // the unchanged letter is also add to the string
+		}
+	}*/
+	/* The new date is returned. The hyphen is replaced with spaces in the new string (with the month in letter and in lowercase) using strings.ReplaceAll */
+	/*return strings.ReplaceAll(newDates, "-", " ")*/
+	date := dates[i]
+	return changeDatesCaractersString(date)
+}
+
+func changeDatesCaractersString(dates string) string {
+	monthString := monthInString()           // The month array                            // The date were modifiying
+	dateInParts := strings.Split(dates, "-") // strings.Split allows to split each part of the date using the hyphen
+	newDates := ""
+
+	if len(dateInParts) < 3 { // dateInParts should be smaller than 3 because the dates are separated in 3 and the array start at 0
+		return dates
+	}
+
+	monthToReplace := dateInParts[1] // The month
+
+	k, err := stringToInt(monthToReplace)
+	if err != nil || k < 1 || k > 12 { // Test to make sure the number asigned to k is a month
+		return dates
+	}
+
+	/* strings.Replace allows to replace in dates[i] the month in number by the month in letters. k-1 is used because the array start at 0.
+	And to make sure that the only the month number change the replacement is done only one time. */
+	letterMonth := strings.Replace(dates, monthToReplace, monthString[k-1], 1)
 
 	/* letterMonth is parcoured to put the month in lowercase */
 	capitalizedDates := []rune(letterMonth)
@@ -97,7 +133,7 @@ func changeRelationCaracters(relation map[string][]string) map[string][]string {
 		}
 		newValues := make([]string, len(values))
 		for i := 0; i < len(values); i++ {
-			newValues[i] = changeDatesCaracters(values, i)
+			newValues[i] = changeDatesCaractersArray(values, i)
 		}
 
 		newRelations[newKey] = newValues

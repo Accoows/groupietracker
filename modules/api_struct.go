@@ -37,9 +37,7 @@ type Relations struct {
 
 // Structure général des données
 type General struct {
-	Artists   []Artist
-	Dates     []DatesData
-	Locations []LocationData
+	Artists []Artist
 }
 
 type AllData struct {
