@@ -10,14 +10,13 @@
 </head>
 
 <body>
-    <a href="/" class="home-link">Home</a>
+    <a href="/artists" class="home-link">Home</a>
     <div class="header">
         <h1>Artists</h1>
 
         <!-- Barre de recherche -->
         <form action="/search" method="POST" class="search-container">
-            <input type="text" name="search" class="search-input"
-                placeholder="Search an artist, an album, a concert" required />
+            <input type="text" name="search" class="search-input" placeholder="Search an artist, an album, a concert" required />
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
@@ -32,6 +31,27 @@
         <button onclick="closePopup()">OK</button>
     </div>
     {{ end }}
+    
+    <!-- Conteneur des filtres (toujours visible) -->
+    <div class="filter-container">
+        <form action="/search" method="POST">
+            <div>
+                <h3>Filter by Creation Date</h3>
+                <label for="fromCreation">From:</label>
+                <input type="number" name="fromCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.From }}">
+                <label for="toCreation">To:</label>
+                <input type="number" name="toCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.To }}">
+            </div>
+            <div>
+                <h3>First Album Date:</h3>
+                <label for="fromFAD">From:</label>
+                <input type="number" name="fromFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.From }}">
+                <label for="toFAD">To:</label>
+                <input type="number" name="toFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.To }}">
+            </div>
+            <button type="submit" class="filter-button">Apply Filter</button>
+        </form>
+    </div>
 
     <!-- Liste des artistes (Résultats de recherche ou liste complète) -->
     <div class="grid">

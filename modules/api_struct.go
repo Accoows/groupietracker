@@ -35,6 +35,24 @@ type Relations struct {
 	} `json:"index"`
 }
 
+// Filters - Stores active filters
+type Filters struct {
+	CD  CreationDate
+	FAD FirstAlbumDate
+}
+
+// CreationDate - Structure to filter by creation date
+type CreationDate struct {
+	From string
+	To   string
+}
+
+// FirstAlbumDate - Structure to filter by first album date (under construction)
+type FirstAlbumDate struct {
+	From string
+	To   string
+}
+
 // General structure of data
 type General struct {
 	Artists []Artist
@@ -43,6 +61,7 @@ type General struct {
 type AllData struct {
 	General   General
 	Search    General
+	Filters   Filters
 	Incorrect bool
 }
 
