@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// GetAPI - Merge du JSON toutes les 5 minutes
+// GetAPI - Merge JSON every 5 minutes
 func (c *SafeCounter) GetAPI() {
 	c.mu.Lock()
 	for {
@@ -16,28 +16,28 @@ func (c *SafeCounter) GetAPI() {
 		Relation := Relations{}
 		artist := ApiRequest("https://groupietrackers.herokuapp.com/api/artists")
 		relation := ApiRequest("https://groupietrackers.herokuapp.com/api/relation")
-		err := json.Unmarshal(artist, &API.General.Artists) // Recupération JSON des artistes
+		err := json.Unmarshal(artist, &API.General.Artists) // Retrieve JSON of artists
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		err = json.Unmarshal(relation, &Relation) // Recupération JSON des relations
+		err = json.Unmarshal(relation, &Relation) // Retrieve JSON of relations
 		if err != nil {
 			log.Println(err)
 			return
 		}
 
 		for i := range API.General.Artists {
-			LoadArtistInfos(&API.General.Artists[i], Relation) // Décode les données des relations
+			LoadArtistInfos(&API.General.Artists[i], Relation) // Decode relation data
 		}
 
-		log.Println("Api has been updated.")
+		log.Println("API has been updated.")
 		time.Sleep(time.Minute * 5)
 	}
 }
 
-func ApiRequest(url string) []byte { // Récupération des données de l'API
-	resp, err := http.Get(url) // On récupère les données et on les stocke dans un tableau de bytes
+func ApiRequest(url string) []byte { // Retrieve data from the API
+	resp, err := http.Get(url) // Retrieve data and store it in a byte array
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -52,7 +52,26 @@ func ApiRequest(url string) []byte { // Récupération des données de l'API
 func LoadArtistInfos(art *Artist, relation Relations) {
 	for _, val := range relation.Index {
 		if art.ID == val.ID {
-			art.DatesLocations = val.DatesLocations // Met à jour les relations si l'ID correspond
+			newDatesLocations := changeRelationCaracters(val.DatesLocations)
+			art.DatesLocations = newDatesLocations // Update relations if the ID matches
 		}
 	}
+}
+
+// uniqueCities - Extract all cities where concerts took place
+func uniqueCities(artists []Artist) []string {
+	citySet := make(map[string]bool)
+	for _, artist := range artists {
+		for city := range artist.DatesLocations {
+			citySet[city] = true
+		}
+	}
+
+	// Convert the map to a slice
+	var cities []string
+	for city := range citySet {
+		cities = append(cities, city)
+	}
+
+	return cities
 }

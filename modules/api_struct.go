@@ -13,12 +13,56 @@ type Artist struct {
 	DatesLocations map[string][]string
 }
 
+type LocationData struct {
+	Index []struct {
+		ID        int      `json:"id"`
+		Locations []string `json:"locations"`
+	} `json:"index"`
+}
+
+type DatesData struct {
+	Index []struct {
+		ID    int      `json:"id"`
+		Dates []string `json:"dates"`
+	} `json:"index"`
+}
+
 // Relations - Structure of concert relations
 type Relations struct {
 	Index []struct {
 		ID             int                 `json:"id"`
 		DatesLocations map[string][]string `json:"datesLocations"`
 	} `json:"index"`
+}
+
+// Filters - Stores active filters
+type Filters struct {
+	CD   CreationDate
+	FAD  FirstAlbumDate
+	NBOM NumberOfMembers
+	City []string
+}
+
+// CreationDate - Structure to filter by creation date
+type CreationDate struct {
+	From string
+	To   string
+}
+
+// FirstAlbumDate - Structure to filter by first album date
+type FirstAlbumDate struct {
+	From string
+	To   string
+}
+
+// NumberOfMembers - Structure to filter by number of members
+type NumberOfMembers struct {
+	From string
+	To   string
+}
+
+type City struct {
+	Name string
 }
 
 // General structure of data
@@ -29,6 +73,7 @@ type General struct {
 type AllData struct {
 	General   General
 	Search    General
+	Filters   Filters
 	Incorrect bool
 }
 
