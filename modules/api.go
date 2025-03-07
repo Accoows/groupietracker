@@ -50,10 +50,13 @@ func ApiRequest(url string) []byte { // Retrieve data from the API
 }
 
 func LoadArtistInfos(art *Artist, relation Relations) {
-	for _, val := range relation.Index {
-		if art.ID == val.ID {
-			newDatesLocations := changeRelationCaracters(val.DatesLocations)
-			art.DatesLocations = newDatesLocations // Update relations if the ID matches
+	artistFirstAlbum := changeDatesCaracters(art.FirstAlbum)
+	art.FirstAlbum = artistFirstAlbum
+
+	for _, rel := range relation.Index { // the index of relation is parcoured to compare the ID with the artist one
+		if art.ID == rel.ID {
+			newDatesLocations := changeRelationCaracters(rel.DatesLocations) // the function changeRelationCaracters is called to change the API apparence
+			art.DatesLocations = newDatesLocations                           // if the ID are the same, relation is updated
 		}
 	}
 }
