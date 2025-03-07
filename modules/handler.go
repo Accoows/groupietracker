@@ -68,6 +68,9 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	API.Search = API.General
 	API.Incorrect = false
 
+	// Add the list of unique cities to API
+	API.Filters.City = uniqueCities(API.General.Artists)
+
 	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
@@ -90,21 +93,132 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	search := r.FormValue("search") // Retrieve search value
+	// Retrieve form values
+	search := r.FormValue("search")             // Search by keyword
+	fromCreation := r.FormValue("fromCreation") // Filter: creation date (start)
+	toCreation := r.FormValue("toCreation")     // Filter: creation date (end)
+	fromFAD := r.FormValue("fromFAD")           // Filter: first album date (start)
+	toFAD := r.FormValue("toFAD")               // Filter: first album date (end)
+	fromNBOM := r.FormValue("fromNBOM")         // Filter: minimum number of members
+	toNBOM := r.FormValue("toNBOM")             // Filter: maximum number of members
+	selectedCities := r.Form["cities"]          // Retrieve selected cities
 
-	if search == "" { // If search is empty, display all artists
-		API.Search = API.General
-	} else {
-		art, searchErr := API.General.SearchArtist(search) // Otherwise, display artists matching the search
-		if searchErr != nil || len(art) == 0 {             // If search does not match any artist
-			API.Incorrect = true   // In this case, display the error pop-up in HTML/JS
-			API.Search = General{} // Display an error message
-		} else {
-			API.Incorrect = false
-			API.Search = General{Artists: art} // Otherwise, display matching artists
-		}
+	// Convert dates to numbers
+	fromCDYear, errFromCD := strconv.Atoi(fromCreation)
+	toCDYear, errToCD := strconv.Atoi(toCreation)
+	fromFADYear, errFromFAD := strconv.Atoi(fromFAD)
+	toFADYear, errToFAD := strconv.Atoi(toFAD)
+	fromNBOMVal, errFromNBOM := strconv.Atoi(fromNBOM)
+	toNBOMVal, errToNBOM := strconv.Atoi(toNBOM)
+
+	if errFromCD != nil {
+		fromCDYear = 1900
+	}
+	if errToCD != nil {
+		toCDYear = 2024
+	}
+	if errFromFAD != nil {
+		fromFADYear = 1900
+	}
+	if errToFAD != nil {
+		toFADYear = 2024
+	}
+	// Default values if empty
+	if errFromNBOM != nil {
+		fromNBOMVal = 1 // Minimum 1 member
+	}
+	if errToNBOM != nil {
+		toNBOMVal = 8 // High value to include everyone
 	}
 
+	log.Println("[CD] Filtering - Years:", fromCDYear, toCDYear)
+	log.Println("[FAD] Filtering - Years:", fromFADYear, toFADYear)
+	log.Println("[NBOM] Filtering - Number:", fromNBOM, toNBOMVal)
+
+	// Initialize filtered artists
+	var filteredArtists []Artist
+
+	// Case where no filter is activated: keep all artists
+	filteredArtists = API.General.Artists
+
+	// Apply creation date filter if a value is provided
+	if fromCDYear > 1900 || toCDYear > 2024 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			if artist.CreationDate >= fromCDYear && artist.CreationDate <= toCDYear {
+				tempArtists = append(tempArtists, artist)
+			}
+		}
+		filteredArtists = tempArtists // Update the list with the applied filter
+	}
+
+	// Apply first album date filter if a value is provided
+	if fromFADYear > 1900 || toFADYear > 2024 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			albumYear, err := strconv.Atoi(artist.FirstAlbum[len(artist.FirstAlbum)-4:]) // Extract the year
+			if err == nil && albumYear >= fromFADYear && albumYear <= toFADYear {
+				tempArtists = append(tempArtists, artist)
+			}
+		}
+		filteredArtists = tempArtists // Update the list with the applied filter
+	}
+
+	// Apply the number of members filter if a value is provided
+	if fromNBOMVal > 0 || toNBOMVal > 8 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			numMembers := len(artist.Members)
+			if numMembers >= fromNBOMVal && numMembers <= toNBOMVal {
+				tempArtists = append(tempArtists, artist)
+			}
+		}
+		filteredArtists = tempArtists // Update the filtered list
+	}
+
+	// Filter by concert city
+	if len(selectedCities) > 0 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			for _, city := range selectedCities {
+				if _, exists := artist.DatesLocations[city]; exists {
+					tempArtists = append(tempArtists, artist)
+					break
+				}
+			}
+		}
+		filteredArtists = tempArtists
+	}
+
+	log.Println("Artists after filtering (Creation + First Album):", len(filteredArtists))
+
+	// Apply keyword search if a term is entered
+	if search != "" {
+		general := General{Artists: filteredArtists}
+		filteredArtists, err = general.SearchArtist(search)
+
+		// If no artist matches
+		if err != nil || len(filteredArtists) == 0 {
+			API.Incorrect = true   // Activate error pop-up
+			API.Search = General{} // Clear results
+		} else {
+			API.Incorrect = false
+			API.Search = General{Artists: filteredArtists} // Update filtered results
+		}
+	} else {
+		API.Search = General{Artists: filteredArtists} // If no search, keep filtered results or display all artists
+	}
+
+	// Save filters for display in the form
+	API.Filters.CD.From = fromCreation
+	API.Filters.CD.To = toCreation
+	API.Filters.FAD.From = fromFAD
+	API.Filters.FAD.To = toFAD
+	API.Filters.NBOM.From = fromNBOM
+	API.Filters.NBOM.To = toNBOM
+	API.Filters.City = selectedCities
+
+	// Handle error display
 	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
