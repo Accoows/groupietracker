@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-=======
 // GetAPI - Merge JSON every 5 minutes
 func (c *SafeCounter) GetAPI() {
 	c.mu.Lock()
