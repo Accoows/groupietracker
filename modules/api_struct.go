@@ -13,7 +13,7 @@ type Artist struct {
 	DatesLocations map[string][]string
 }
 
-type LocationData struct {
+type LocationData struct  {
 	Index []struct {
 		ID        int      `json:"id"`
 		Locations []string `json:"locations"`
