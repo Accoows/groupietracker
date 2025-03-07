@@ -37,7 +37,7 @@ body { /* background de la page  */
 .cta-button { /* bouton d'appel */
     padding: 1rem 2rem;
     font-size: 1.2rem;
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     text-decoration: none;
     border-radius: 30px;
@@ -157,7 +157,7 @@ body { /* background de la page  */
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 1rem;
-    border-bottom: 2px solid #e74c3c;
+    border-bottom: 2px solid  #C0392B;
     padding-bottom: 0.5rem;
 }
 
@@ -233,6 +233,17 @@ body { /* background de la page  */
     border-radius: 5px;
     z-index: 1000;
 }
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 /* Style global de la barre de recherche */
 .search-container {
     position: relative;
@@ -274,7 +285,7 @@ body { /* background de la page  */
 .search-button {
     position: absolute;
     right: 0;
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -298,7 +309,7 @@ body { /* background de la page  */
     top: 1rem;
     left: 1rem;
     padding: 0.5rem 1.5rem; /* Agrandissement du padding pour ressembler au bouton rechercher */
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     text-decoration: none;
     border-radius: 25px; /* Border-radius arrondi pour correspondre au style */
@@ -341,7 +352,7 @@ body { /* background de la page  */
 }
 
 .popup button {
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -383,7 +394,7 @@ body { /* background de la page  */
 .back-button { 
     padding: 0.6rem 1.1rem;
     font-size: 1.3rem;
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     text-decoration: none;
     border-radius: 30px;

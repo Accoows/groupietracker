@@ -8,38 +8,38 @@ import (
 	"strconv"
 )
 
-var API AllData            // Variable globale pour les données de l'API
-var tpl *template.Template // Template pour les pages HTML
+var API AllData            // Global variable for API data
+var tpl *template.Template // Template for HTML pages
 var err error
 
 type Info struct {
-	ArtistID interface{} // Stock les informations de l'artiste concerné
+	ArtistID interface{} // Stores information about the concerned artist
 }
 
 func init() {
 	c := SafeCounter{values: make(map[string]int)}
-	go c.GetAPI() // Récupération des données de l'API toutes les 5 minutes (modifiable si ralentissement)
+	go c.GetAPI() // Retrieve API data every 5 minutes (modifiable if slowdown occurs)
 	tpl, err = template.ParseGlob("templates/*.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	Relation := Relations{}
-	relation := ApiRequest("https://groupietrackers.herokuapp.com/api/relation") // Récupération la relation des artistes
-	err = json.Unmarshal(relation, &Relation)                                    // Décode les données de la relation
+	relation := ApiRequest("https://groupietrackers.herokuapp.com/api/relation") // Retrieve artist relations
+	err = json.Unmarshal(relation, &Relation)                                    // Decode relation data
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	for i := range API.General.Artists {
-		LoadArtistInfos(&API.General.Artists[i], Relation) // Association des relations aux artistes
+		LoadArtistInfos(&API.General.Artists[i], Relation) // Associate relations with artists
 	}
 }
 
-// HomePage - Gestionnaire de la page d'accueil
+// HomePage - Handler for the home page
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		ErrorHandle(http.StatusNotFound, w, "404 not found") // On gère les erreurs de la page
+		ErrorHandle(http.StatusNotFound, w, "404 not found") // Handle page errors
 		return
 	}
 	if r.Method != http.MethodGet {
@@ -49,12 +49,12 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 
 	API.Incorrect = false
 
-	if err = tpl.ExecuteTemplate(w, "homepage.html", API); err != nil { // Démarrage de la page d'accueil
+	if err = tpl.ExecuteTemplate(w, "homepage.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
-// MainPage - Gestionnaire de la page principale
+// MainPage - Handler for the main page
 func MainPage(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/artists" {
 		ErrorHandle(http.StatusNotFound, w, "404 not found")
@@ -68,12 +68,12 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	API.Search = API.General
 	API.Incorrect = false
 
-	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil { // Démarrage de la page principale
+	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
-// SearchHandler - Gestionnaire de recherche
+// SearchHandler - Handler for search
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/search" {
 		ErrorHandle(http.StatusNotFound, w, "404 not found")
@@ -84,39 +84,39 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseForm() // On récupère les données du formulaire
+	err := r.ParseForm() // Retrieve form data
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	search := r.FormValue("search") // On récupère la valeur de la recherche
+	search := r.FormValue("search") // Retrieve search value
 
-	if search == "" { // Si la recherche est vide, on affiche tous les artistes
+	if search == "" { // If search is empty, display all artists
 		API.Search = API.General
 	} else {
-		art, searchErr := API.General.SearchArtist(search) // Sinon, on affiche les artistes correspondants à la recherche
-		if searchErr != nil || len(art) == 0 {             // Si la recherche ne correspond à aucun artiste
-			API.Incorrect = true   // Dans ce cas, on passe sur l'affichage de la pop up d'erreur en HTML/JS
-			API.Search = General{} // On affiche un message d'erreur
+		art, searchErr := API.General.SearchArtist(search) // Otherwise, display artists matching the search
+		if searchErr != nil || len(art) == 0 {             // If search does not match any artist
+			API.Incorrect = true   // In this case, display the error pop-up in HTML/JS
+			API.Search = General{} // Display an error message
 		} else {
 			API.Incorrect = false
-			API.Search = General{Artists: art} // Sinon, on affiche les artistes correspondants
+			API.Search = General{Artists: art} // Otherwise, display matching artists
 		}
 	}
 
-	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil { // Démarrage de la page de recherche
+	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
-// ArtistPage - Gestionnaire de page d'artiste
+// ArtistPage - Handler for artist page
 func ArtistPage(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/artist/" {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	id, err := strconv.Atoi(r.URL.Path[8:]) // On récupère l'ID de l'artiste et on le convertit en int
+	id, err := strconv.Atoi(r.URL.Path[8:]) // Retrieve artist ID and convert to int
 	if err != nil {
 		ErrorHandle(http.StatusBadRequest, w, err, "400 Bad request")
 		return
@@ -129,20 +129,19 @@ func ArtistPage(w http.ResponseWriter, r *http.Request) {
 		ErrorHandle(http.StatusMethodNotAllowed, w, "405 Method Not Allowed")
 		return
 	}
-
 	info := &Info{
-		ArtistID: API.General.Artists[id-1], // On récupère les informations de l'artiste
-	} // On retire 1 pour éviter les erreurs de décalage entre Go et l'ID de l'artiste
+		ArtistID: API.General.Artists[id-1], // Retrieve artist information
+	} // Subtract 1 to avoid offset errors between Go and artist ID
 
-	if err = tpl.ExecuteTemplate(w, "artistInformations.html", info); err != nil { // Démarrage de la page de recherche
+	if err = tpl.ExecuteTemplate(w, "artistInformations.html", info); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
 }
 
-// ErrorHandle - Gestion des erreurs du site
+// ErrorHandle - Handle site errors
 func ErrorHandle(ErrorStatus int, w http.ResponseWriter, errC ...interface{}) {
 	for _, val := range errC {
-		log.Println(val) // ON affiche les erreurs dans la console (à supprimer plus tard pour éviter le spam ou autre)
+		log.Println(val) // Display errors in the console (to be removed later to avoid spam or other issues)
 	}
 	w.WriteHeader(ErrorStatus)
 	tpl.ExecuteTemplate(w, "errors.html", ErrorStatus)
