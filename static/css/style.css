@@ -233,17 +233,7 @@ body { /* background de la page  */
     border-radius: 5px;
     z-index: 1000;
 }
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
+
 /* Style global de la barre de recherche */
 .search-container {
     position: relative;

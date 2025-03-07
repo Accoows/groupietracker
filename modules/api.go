@@ -54,9 +54,9 @@ func LoadArtistInfos(art *Artist, relation Relations) {
 	artistFirstAlbum := changeDatesCaracters(art.FirstAlbum)
 	art.FirstAlbum = artistFirstAlbum
 
-	for _, val := range relation.Index { // the index of relation is parcoured to compare the ID with the artist one
-		if art.ID == val.ID {
-			newDatesLocations := changeRelationCaracters(val.DatesLocations) // the function changeRelationCaracters is called to change the API apparence
+	for _, rel := range relation.Index { // the index of relation is parcoured to compare the ID with the artist one
+		if art.ID == rel.ID {
+			newDatesLocations := changeRelationCaracters(rel.DatesLocations) // the function changeRelationCaracters is called to change the API apparence
 			art.DatesLocations = newDatesLocations                           // if the ID are the same, relation is updated
 		}
 	}
