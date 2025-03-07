@@ -68,7 +68,6 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	API.Search = API.General
 	API.Incorrect = false
 
-
 	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}

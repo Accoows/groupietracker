@@ -18,7 +18,7 @@ func (artistsData *General) SearchArtist(search string) ([]Artist, error) {
 			}
 		}
 	}
-  
+
 	// Search by artist name
 	for _, art := range artistsData.Artists {
 		if strings.Contains(strings.ToLower(art.Name), strings.ToLower(search)) {

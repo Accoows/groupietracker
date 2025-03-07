@@ -35,8 +35,23 @@ body {
     line-height: 1.6;
 }
 
-/* Artists page styles */
-.header {
+.cta-button { /* bouton d'appel */
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background:  #C0392B;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.cta-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+
+.header { /* page d'artiste */
     text-align: center;
     margin-bottom: 3rem;
     padding-top: 2rem;
@@ -142,7 +157,7 @@ body {
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 1rem;
-    border-bottom: 2px solid #e74c3c;
+    border-bottom: 2px solid  #C0392B;
     padding-bottom: 0.5rem;
 }
 
@@ -260,7 +275,7 @@ body {
 .search-button {
     position: absolute;
     right: 0;
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -284,7 +299,7 @@ body {
     top: 1rem;
     left: 1rem;
     padding: 0.5rem 1.5rem; /* Agrandissement du padding pour ressembler au bouton rechercher */
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     text-decoration: none;
     border-radius: 25px; /* Border-radius arrondi pour correspondre au style */
@@ -328,7 +343,7 @@ body {
 }
 
 .popup button {
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -370,7 +385,7 @@ body {
 .back-button { 
     padding: 0.6rem 1.1rem;
     font-size: 1.3rem;
-    background: #e74c3c;
+    background:  #C0392B;
     color: white;
     text-decoration: none;
     border-radius: 30px;

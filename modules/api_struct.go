@@ -35,7 +35,6 @@ type Relations struct {
 	} `json:"index"`
 }
 
-
 // General structure of data
 type General struct {
 	Artists []Artist

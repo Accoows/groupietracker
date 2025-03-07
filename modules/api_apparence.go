@@ -10,8 +10,8 @@ import (
 function to modify the apparence of the locations from the api.
 The underscores are replaced with spaces and the cities and countries names are capitalized
 */
-func changeLocationsCaracters(locations []string, i int) string {
-	location := []rune(locations[i])
+func changeLocationsCaracters(locations string) string {
+	location := []rune(locations)
 
 	for j := 0; j < len(location); j++ {
 		/* The first letter, letters after underscores and the first letter after the dash are capitalized. */
@@ -51,26 +51,25 @@ func stringToInt(stringToReplace string) (int, error) {
 function to modify the apparence of the dates from the api.
 The month are wrote in letters and the first letter are now in lowercase. The hyphen are now spaces.
 */
-func changeDatesCaracters(dates []string, i int) string {
-	monthString := monthInString()              // The month array
-	date := dates[i]                            // The date were modifiying
-	dateInParts := strings.Split(dates[i], "-") // strings.Split allows to split each part of the date using the hyphen
+func changeDatesCaracters(dates string) string {
+	monthString := monthInString()           // The month array                            // The date were modifiying
+	dateInParts := strings.Split(dates, "-") // strings.Split allows to split each part of the date using the hyphen
 	newDates := ""
 
 	if len(dateInParts) < 3 { // dateInParts should be smaller than 3 because the dates are separated in 3 and the array start at 0
-		return date
+		return dates
 	}
 
 	monthToReplace := dateInParts[1] // The month
 
 	k, err := stringToInt(monthToReplace)
 	if err != nil || k < 1 || k > 12 { // Test to make sure the number asigned to k is a month
-		return date
+		return dates
 	}
 
 	/* strings.Replace allows to replace in dates[i] the month in number by the month in letters. k-1 is used because the array start at 0.
 	And to make sure that the only the month number change the replacement is done only one time. */
-	letterMonth := strings.Replace(dates[i], monthToReplace, monthString[k-1], 1)
+	letterMonth := strings.Replace(dates, monthToReplace, monthString[k-1], 1)
 
 	/* letterMonth is parcoured to put the month in lowercase */
 	capitalizedDates := []rune(letterMonth)
@@ -86,21 +85,24 @@ func changeDatesCaracters(dates []string, i int) string {
 	return strings.ReplaceAll(newDates, "-", " ")
 }
 
+/*
+function to modify the apparence of the dates and the locations of the relations API.
+It use the changeDatesCaracters and the chanceLocationCaracters to do so
+*/
 func changeRelationCaracters(relation map[string][]string) map[string][]string {
-	newRelations := make(map[string][]string)
-	newKey := ""
-	for key, values := range relation {
-		keyToReplace := []string{key}
-		for i := 0; i < len(keyToReplace); i++ {
-			keyToReplace[i] = changeLocationsCaracters(keyToReplace, i)
-			newKey = string(keyToReplace[i])
-		}
-		newValues := make([]string, len(values))
-		for i := 0; i < len(values); i++ {
-			newValues[i] = changeDatesCaracters(values, i)
+	newRelations := make(map[string][]string) // a map array is created to receive the modified caracters of relations
+	newLocations := ""
+	for loc, dates := range relation { // relation is parcoured to separate the key, loc, and the values, dates.
+		newLocations = changeLocationsCaracters(loc) // the locations are modified with the chanceLocationCaracters function
+
+		newDates := make([]string, len(dates)) // we create an array of string of the lenght of dates to receive the modified caracters of dates
+		for i := 0; i < len(dates); i++ {
+			newDates[i] = changeDatesCaracters(dates[i]) // the locations are modified with the chanceDatesCaracters function
 		}
 
-		newRelations[newKey] = newValues
+		/* to make sure that the API values have the same structure after the changes, the key of relation being locations, newLocations is used as the key
+		of newRelations. And dates being the value, newDates is assigned as the value. */
+		newRelations[newLocations] = newDates
 	}
-	return newRelations
+	return newRelations // the new map is returned
 }
