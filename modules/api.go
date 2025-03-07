@@ -57,3 +57,21 @@ func LoadArtistInfos(art *Artist, relation Relations) {
 		}
 	}
 }
+
+// uniqueCities - Extract all cities where concerts took place
+func uniqueCities(artists []Artist) []string {
+	citySet := make(map[string]bool)
+	for _, artist := range artists {
+		for city := range artist.DatesLocations {
+			citySet[city] = true
+		}
+	}
+
+	// Convert the map to a slice
+	var cities []string
+	for city := range citySet {
+		cities = append(cities, city)
+	}
+
+	return cities
+}

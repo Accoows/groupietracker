@@ -40,6 +40,7 @@ type Filters struct {
 	CD   CreationDate
 	FAD  FirstAlbumDate
 	NBOM NumberOfMembers
+	City []string
 }
 
 // CreationDate - Structure to filter by creation date
@@ -58,6 +59,10 @@ type FirstAlbumDate struct {
 type NumberOfMembers struct {
 	From string
 	To   string
+}
+
+type City struct {
+	Name string
 }
 
 // General structure of data

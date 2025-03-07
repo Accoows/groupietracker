@@ -68,6 +68,9 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	API.Search = API.General
 	API.Incorrect = false
 
+	// Add the list of unique cities to API
+	API.Filters.City = uniqueCities(API.General.Artists)
+
 	if err := tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {
 		ErrorHandle(http.StatusInternalServerError, w, err, "500 Internal Server Error")
 	}
@@ -98,6 +101,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	toFAD := r.FormValue("toFAD")               // Filter: first album date (end)
 	fromNBOM := r.FormValue("fromNBOM")         // Filter: minimum number of members
 	toNBOM := r.FormValue("toNBOM")             // Filter: maximum number of members
+	selectedCities := r.Form["cities"]          // Retrieve selected cities
 
 	// Convert dates to numbers
 	fromCDYear, errFromCD := strconv.Atoi(fromCreation)
@@ -119,12 +123,12 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	if errToFAD != nil {
 		toFADYear = 2024
 	}
-	// Valeurs par défaut si vide
+	// Default values if empty
 	if errFromNBOM != nil {
-		fromNBOMVal = 1 // Minimum 1 membre
+		fromNBOMVal = 1 // Minimum 1 member
 	}
 	if errToNBOM != nil {
-		toNBOMVal = 8 // Valeur élevée pour inclure tout le monde
+		toNBOMVal = 8 // High value to include everyone
 	}
 
 	log.Println("[CD] Filtering - Years:", fromCDYear, toCDYear)
@@ -161,7 +165,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Apply the number of members filter if a value is provided
-	if fromNBOMVal > 0 || toNBOMVal > 10 {
+	if fromNBOMVal > 0 || toNBOMVal > 8 {
 		var tempArtists []Artist
 		for _, artist := range filteredArtists {
 			numMembers := len(artist.Members)
@@ -169,7 +173,21 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 				tempArtists = append(tempArtists, artist)
 			}
 		}
-		filteredArtists = tempArtists // Mise à jour de la liste filtrée
+		filteredArtists = tempArtists // Update the filtered list
+	}
+
+	// Filter by concert city
+	if len(selectedCities) > 0 {
+		var tempArtists []Artist
+		for _, artist := range filteredArtists {
+			for _, city := range selectedCities {
+				if _, exists := artist.DatesLocations[city]; exists {
+					tempArtists = append(tempArtists, artist)
+					break
+				}
+			}
+		}
+		filteredArtists = tempArtists
 	}
 
 	log.Println("Artists after filtering (Creation + First Album):", len(filteredArtists))
@@ -198,6 +216,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	API.Filters.FAD.To = toFAD
 	API.Filters.NBOM.From = fromNBOM
 	API.Filters.NBOM.To = toNBOM
+	API.Filters.City = selectedCities
 
 	// Handle error display
 	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {

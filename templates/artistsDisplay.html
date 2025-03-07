@@ -14,25 +14,25 @@
     <div class="header">
         <h1>Artists</h1>
 
-        <!-- Barre de recherche -->
+        <!-- Search bar -->
         <form action="/search" method="POST" class="search-container">
             <input type="text" name="search" class="search-input" placeholder="Search an artist, an album, a concert" required />
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
 
-    <!-- Fond assombri -->
+    <!-- Darkened background -->
     <div id="popupOverlay" class="popup-overlay"></div>
 
-    <!-- Pop-up d'erreur -->
+    <!-- Error pop-up -->
     {{ if .Incorrect }}
     <div id="errorPopup" class="popup">
-        <p>No resuls found</p>
+        <p>No results found</p>
         <button onclick="closePopup()">OK</button>
     </div>
     {{ end }}
     
-    <!-- Conteneur des filtres (toujours visible) -->
+    <!-- Filter container (always visible) -->
     <div class="filter-container">
         <form action="/search" method="POST">
             <div>
@@ -56,11 +56,22 @@
                 <label for="toNBOM">To:</label>
                 <input type="number" name="toNBOM" min="1" max="8" placeholder="Max" value="{{ .Filters.NBOM.To }}">
             </div>
+            <div>
+                <h3>Filter by Concert Location</h3>
+                <ul>
+                    {{ range .Filters.City }}
+                    <li>
+                        <input type="checkbox" name="cities" value="{{ . }}">
+                        {{ . }}
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
             <button type="submit" class="filter-button">Apply Filter</button>
         </form>
     </div>
 
-    <!-- Liste des artistes (Résultats de recherche ou liste complète) -->
+    <!-- List of artists (Search results or complete list) -->
     <div class="grid">
         {{ if .Search.Artists }}
         {{ range .Search.Artists }}
