@@ -222,18 +222,6 @@ body {
     color: #666;
 }
 
-.home-link { /* bouton pour revenir de l'accueil */
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    padding: 0.5rem 1rem;
-    background: #333;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    z-index: 1000;
-}
-
 /* Style global de la barre de recherche */
 .search-container {
     position: relative;
@@ -298,7 +286,7 @@ body {
     position: fixed;
     top: 1rem;
     left: 1rem;
-    padding: 0.5rem 1.5rem; /* Agrandissement du padding pour ressembler au bouton rechercher */
+    padding: 0.5rem 1.3rem; /* Agrandissement du padding pour ressembler au bouton rechercher */
     background:  #C0392B;
     color: white;
     text-decoration: none;
@@ -413,4 +401,112 @@ body {
 .explore-button:hover {
     background: #c0392b;
     transform: scale(1.05);
+}
+
+/* Conteneur principal pour organiser les filtres et les artistes */
+.main-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; /* Espace entre les filtres et la grille des artistes */
+    padding: 20px;
+    max-width: 1500px;
+    margin: auto;
+}
+
+/* Barre latérale des filtres */
+.filter-container {
+    width: 320px; /* Largeur fixe pour éviter tout chevauchement */
+    overflow-y: auto; /* Défilement si les filtres dépassent la hauteur de la barre latérale */
+    padding: 20px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content; /* Ne pas dépasser la hauteur des éléments */
+    position: sticky;
+    top: 20px; /* Reste visible quand on fait défiler la page */
+}
+
+/* Sections des filtres */
+.filter-container h3 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Ajustement des champs de formulaire */
+.filter-container input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Liste des villes avec une hauteur limitée et un défilement */
+.filter-container ul {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background: white;
+}
+
+/* Bouton d'application des filtres */
+.filter-button {
+    width: 100%;
+    padding: 10px;
+    background: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.filter-button:hover {
+    background: #005bb5;
+}
+
+/* Ajustement de la grille des artistes pour qu'elle ne soit pas cachée */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    flex-grow: 1; /* Permet à la grille de s'ajuster correctement */
+    padding: 20px;
+}
+
+/* Cartes des artistes */
+.artist-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.artist-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Ajustement pour s'assurer que les artistes ne se retrouvent pas masqués */
+@media screen and (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-container {
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+
+    .grid {
+        width: 100%;
+        margin: 0;
+    }
 }

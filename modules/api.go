@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"sort"
 	"time"
 )
 
@@ -77,6 +78,8 @@ func uniqueCities(artists []Artist) []string {
 	for city := range citySet {
 		cities = append(cities, city)
 	}
+
+	sort.Strings(cities)
 
 	return cities
 }

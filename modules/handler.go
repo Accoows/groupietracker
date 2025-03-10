@@ -209,6 +209,28 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		API.Search = General{Artists: filteredArtists} // If no search, keep filtered results or display all artists
 	}
 
+	// Gestion des villes pour garder la liste complète
+	allCities := uniqueCities(API.General.Artists) // Récupérer toutes les villes
+	selectedCityMap := make(map[string]bool)
+	for _, city := range selectedCities {
+		selectedCityMap[city] = true
+	}
+
+	// Organiser les villes : d'abord les cochées, puis le reste
+	var updatedCities []string
+	for _, city := range allCities {
+		if selectedCityMap[city] {
+			updatedCities = append(updatedCities, city) // Mettre en haut celles sélectionnées
+		}
+	}
+	for _, city := range allCities {
+		if !selectedCityMap[city] {
+			updatedCities = append(updatedCities, city)
+		}
+	}
+
+	API.Filters.City = updatedCities // Mettre à jour l'affichage des villes
+
 	// Save filters for display in the form
 	API.Filters.CD.From = fromCreation
 	API.Filters.CD.To = toCreation
@@ -216,7 +238,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	API.Filters.FAD.To = toFAD
 	API.Filters.NBOM.From = fromNBOM
 	API.Filters.NBOM.To = toNBOM
-	API.Filters.City = selectedCities
 
 	// Handle error display
 	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {

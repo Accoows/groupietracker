@@ -77,7 +77,7 @@ type AllData struct {
 	Incorrect bool
 }
 
-// System to avoid concurrency issues
+// System to avoid concurrency issuesA
 type SafeCounter struct {
 	mu     sync.Mutex
 	values map[string]int
