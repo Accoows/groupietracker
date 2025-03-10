@@ -1,16 +1,16 @@
-* { /* style généraux */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;  /* Définit la police par défaut pour tous les éléments */
+    font-family: 'Arial', sans-serif;
 }
 
-body { /* background de la page  */
-    background: rgb(45, 45, 45); 
+body {
+    background: rgb(45, 45, 45);
 }
 
-
-.hero { /* page d'accueil */    
+/* Welcome page styles */
+.hero {
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -21,11 +21,12 @@ body { /* background de la page  */
     color: white;
 }
 
-.hero h1 { /* titre principal */
+.hero h1 {
     font-size: 4rem;
     margin-bottom: 2rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
+
 
 .description { /* je pense que c'est la description ? */
     font-size: 1.2rem;
@@ -104,11 +105,12 @@ body { /* background de la page  */
 
 .artist-details {
     font-size: 0.9rem;
+    text-align: left;
     color: #666;
 }
 
-
-.container { /* conteneur */
+/* Artist detail page styles */
+.container {
     max-width: 1000px;
     margin: 2rem auto;
     background: white;
@@ -142,8 +144,6 @@ body { /* background de la page  */
     color: rgb(255, 255, 255);
     padding-left: 150px;
 }
-
-
 
 .artist-info {
     padding: 2rem;
@@ -317,6 +317,7 @@ body { /* background de la page  */
 .home-link:focus {
     outline: none;
 }
+
 /* Error popup styles */
 .popup {
     display: none; /* Hidden by default */
@@ -393,6 +394,23 @@ body { /* background de la page  */
 }
 
 .back-button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Explore button */
+.explore-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background: #e74c3c;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.explore-button:hover {
     background: #c0392b;
     transform: scale(1.05);
 }
