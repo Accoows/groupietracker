@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"sort"
 	"time"
 )
 
@@ -30,6 +31,8 @@ func (c *SafeCounter) GetAPI() {
 		for i := range API.General.Artists {
 			LoadArtistInfos(&API.General.Artists[i], Relation) // Decode relation data
 		}
+
+		SortArtistsAlphabetically(API.General.Artists)
 
 		log.Println("API has been updated.")
 		time.Sleep(time.Minute * 5)
@@ -61,6 +64,13 @@ func LoadArtistInfos(art *Artist, relation Relations) {
 	}
 }
 
+// Trie les artistes par ordre alphabétique
+func SortArtistsAlphabetically(artists []Artist) {
+	sort.Slice(artists, func(i, j int) bool {
+		return artists[i].Name < artists[j].Name
+	})
+}
+
 // uniqueCities - Extract all cities where concerts took place
 func uniqueCities(artists []Artist) []string {
 	citySet := make(map[string]bool)
@@ -75,6 +85,8 @@ func uniqueCities(artists []Artist) []string {
 	for city := range citySet {
 		cities = append(cities, city)
 	}
+
+	sort.Strings(cities)
 
 	return cities
 }
