@@ -39,13 +39,16 @@
             <div>
                 <h3>Filter by Creation Date</h3>
                 <label for="fromCreation">From:</label>
-                <input type="number" name="fromCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.From }}">
+                <input type="number" name="fromCreation" min="1958" max="2024" placeholder="YYYY" value="{{ .Filters.CD.From }}">
                 <label for="toCreation">To:</label>
-                <input type="number" name="toCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.To }}">
+                <input type="number" name="toCreation" min="1958" max="2024" placeholder="YYYY" value="{{ .Filters.CD.To }}">
             </div>
             <div>
                 <h3>First Album Date:</h3>
                 <label for="fromFAD">From:</label>
+                <input type="number" name="fromFAD" min="1958" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.From }}">
+                <label for="toFAD">To:</label>
+                <input type="number" name="toFAD" min="1958" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.To }}">
                 <input type="number" name="fromFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.From }}">
                 <label for="toFAD">To:</label>
                 <input type="number" name="toFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.To }}">
