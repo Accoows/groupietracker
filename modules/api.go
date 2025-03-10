@@ -51,13 +51,31 @@ func ApiRequest(url string) []byte { // Retrieve data from the API
 
 func LoadArtistInfos(art *Artist, relation Relations) {
 
-	artistFirstAlbum := changeDatesCaracters(art.FirstAlbum)
+	artistFirstAlbum := ChangeDatesCaracters(art.FirstAlbum)
 	art.FirstAlbum = artistFirstAlbum
 
 	for _, rel := range relation.Index { // the index of relation is parcoured to compare the ID with the artist one
 		if art.ID == rel.ID {
-			newDatesLocations := changeRelationCaracters(rel.DatesLocations) // the function changeRelationCaracters is called to change the API apparence
+			newDatesLocations := ChangeRelationCaracters(rel.DatesLocations) // the function changeRelationCaracters is called to change the API apparence
 			art.DatesLocations = newDatesLocations                           // if the ID are the same, relation is updated
 		}
 	}
+}
+
+// uniqueCities - Extract all cities where concerts took place
+func uniqueCities(artists []Artist) []string {
+	citySet := make(map[string]bool)
+	for _, artist := range artists {
+		for city := range artist.DatesLocations {
+			citySet[city] = true
+		}
+	}
+
+	// Convert the map to a slice
+	var cities []string
+	for city := range citySet {
+		cities = append(cities, city)
+	}
+
+	return cities
 }
