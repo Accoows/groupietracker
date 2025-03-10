@@ -112,13 +112,13 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	toNBOMVal, errToNBOM := strconv.Atoi(toNBOM)
 
 	if errFromCD != nil {
-		fromCDYear = 1900
+		fromCDYear = 1958
 	}
 	if errToCD != nil {
 		toCDYear = 2024
 	}
 	if errFromFAD != nil {
-		fromFADYear = 1900
+		fromFADYear = 1958
 	}
 	if errToFAD != nil {
 		toFADYear = 2024
@@ -142,7 +142,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	filteredArtists = API.General.Artists
 
 	// Apply creation date filter if a value is provided
-	if fromCDYear > 1900 || toCDYear > 2024 {
+	if fromCDYear > 1958 || toCDYear > 2024 {
 		var tempArtists []Artist
 		for _, artist := range filteredArtists {
 			if artist.CreationDate >= fromCDYear && artist.CreationDate <= toCDYear {
@@ -153,7 +153,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Apply first album date filter if a value is provided
-	if fromFADYear > 1900 || toFADYear > 2024 {
+	if fromFADYear > 1958 || toFADYear > 2024 {
 		var tempArtists []Artist
 		for _, artist := range filteredArtists {
 			albumYear, err := strconv.Atoi(artist.FirstAlbum[len(artist.FirstAlbum)-4:]) // Extract the year
