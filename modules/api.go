@@ -32,8 +32,6 @@ func (c *SafeCounter) GetAPI() {
 			LoadArtistInfos(&API.General.Artists[i], Relation) // Decode relation data
 		}
 
-		SortArtistsAlphabetically(API.General.Artists)
-
 		log.Println("API has been updated.")
 		time.Sleep(time.Minute * 5)
 	}
@@ -62,13 +60,6 @@ func LoadArtistInfos(art *Artist, relation Relations) {
 			art.DatesLocations = newDatesLocations                           // if the ID are the same, relation is updated
 		}
 	}
-}
-
-// Trie les artistes par ordre alphabétique
-func SortArtistsAlphabetically(artists []Artist) {
-	sort.Slice(artists, func(i, j int) bool {
-		return artists[i].Name < artists[j].Name
-	})
 }
 
 // uniqueCities - Extract all cities where concerts took place
