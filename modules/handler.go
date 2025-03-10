@@ -209,18 +209,18 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		API.Search = General{Artists: filteredArtists} // If no search, keep filtered results or display all artists
 	}
 
-	// Gestion des villes pour garder la liste complète
-	allCities := uniqueCities(API.General.Artists) // Récupérer toutes les villes
+	// Manage cities to keep the complete list
+	allCities := uniqueCities(API.General.Artists) // Retrieve all cities
 	selectedCityMap := make(map[string]bool)
 	for _, city := range selectedCities {
 		selectedCityMap[city] = true
 	}
 
-	// Organiser les villes : d'abord les cochées, puis le reste
+	// Organize cities: first the selected ones, then the rest
 	var updatedCities []string
 	for _, city := range allCities {
 		if selectedCityMap[city] {
-			updatedCities = append(updatedCities, city) // Mettre en haut celles sélectionnées
+			updatedCities = append(updatedCities, city) // Put selected ones at the top
 		}
 	}
 	for _, city := range allCities {
@@ -229,7 +229,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	API.Filters.City = updatedCities // Mettre à jour l'affichage des villes
+	API.Filters.City = updatedCities // Update city display
 
 	// Save filters for display in the form
 	API.Filters.CD.From = fromCreation
