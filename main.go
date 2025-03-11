@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// Gestion des fichiers statiques
+	// Gestion of the static files
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 

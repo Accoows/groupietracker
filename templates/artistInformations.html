@@ -8,10 +8,10 @@
 </head>
 <body>
     <div class="navigation">
-        <a href="/artists" class="back-button">Back</a>
+        <a href="/artists" class="exploreartist-button">Back</a>
     </div>
 
-    <div class="container">
+    <div class="artist-overview">
         <div class="artist-header">
             <img src="{{.ArtistID.Image}}" alt="{{.ArtistID.Name}}" class="artist-image">
             <h1 class="artist-name">{{.ArtistID.Name}}</h1>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="info-section">
-                <h2 class="info-title">Relations</h2>
+                <h2 class="info-title">Concerts</h2>
                 <ul class="dates-list">
                     {{range $key, $value := .ArtistID.DatesLocations}}
                     <li><strong>{{ $key }} :</strong> {{ range $value }}{{.}}, {{end }}</li>

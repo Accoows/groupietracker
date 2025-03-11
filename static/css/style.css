@@ -1,16 +1,16 @@
-* { /* style généraux */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;  /* Définit la police par défaut pour tous les éléments */
+    font-family: 'Arial', sans-serif;
 }
 
-body { /* background de la page  */
-    background: rgb(45, 45, 45); 
+body {
+    background: rgb(45, 45, 45);
 }
 
-
-.hero { /* page d'accueil */    
+/* Welcome page styles */
+.title {
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -21,20 +21,21 @@ body { /* background de la page  */
     color: white;
 }
 
-.hero h1 { /* titre principal */
+.title h1 {  
     font-size: 4rem;
     margin-bottom: 2rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-.description { /* je pense que c'est la description ? */
+
+.introduction { /* obviously the intro*/
     font-size: 1.2rem;
     max-width: 600px;
     margin-bottom: 3rem;
     line-height: 1.6;
 }
 
-.cta-button { /* bouton d'appel */
+.exploreartist-button { /* bouton d'appel */
     padding: 1rem 2rem;
     font-size: 1.2rem;
     background:  #C0392B;
@@ -44,7 +45,7 @@ body { /* background de la page  */
     transition: transform 0.3s, background 0.3s;
 }
 
-.cta-button:hover {
+.exploreartist-button:hover {
     background: #c0392b;
     transform: scale(1.05);
 }
@@ -62,7 +63,7 @@ body { /* background de la page  */
     margin-bottom: 1rem;
 }
 
-.grid { /* affiche les artistes en grille */
+.grid { /* display the artist in a grid that fills the page*/
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
@@ -71,7 +72,7 @@ body { /* background de la page  */
     padding: 2rem;
 }
 
-.artist-card { /* carte d'artiste */ 
+.artist-card { /* styling each individual artist card */ 
     background: white;
     border-radius: 10px;
     overflow: hidden;
@@ -81,34 +82,35 @@ body { /* background de la page  */
     color: inherit;
 }
 
-.artist-card:hover { /* hover */
+.artist-card:hover { /* hover the card */
     transform: translateY(-5px);
 }
 
-.artist-image { 
+.artist-image { /* ensures the artist image fills the width of the card */
     width: 100%;
     height: 250px;
     object-fit: cover;
 }
 
-.artist-info {
+.artist-info { /* Adds padding to the artist information */
     padding: 1rem;
 }
 
-.artist-name {
+.artist-name { /* styling the artist name */
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: #333;
 }
 
-.artist-details {
+.artist-details { /* styling the artist details */
     font-size: 0.9rem;
+    text-align: left;
     color: #666;
 }
 
 
-.container { /* conteneur */
+.artist-overview { /* page of the artist */
     max-width: 1000px;
     margin: 2rem auto;
     background: white;
@@ -117,7 +119,7 @@ body { /* background de la page  */
     box-shadow: 0 2px 20px rgba(0,0,0,0.1);
 }
 
-.artist-header {
+.artist-header { /* black band at the top of the page */
     position: relative;
     height: 300px;
     background: rgb(55, 55, 55); /* Fond blanc */
@@ -126,26 +128,23 @@ body { /* background de la page  */
     padding-left: 200px; /* Espace entre le bord gauche et l'image */
 }
 
-.artist-header .artist-image {
-    width: 200px; /* Taille de l'image */
+.artist-header .artist-image { /* image inside the header*/
+    width: 200px; /* image size */
     height: 200px;
-    background-color: black; /* Fond noir */
+    background-color: black; 
     object-fit: cover;
-    border-radius: 10px; /* Coins arrondis */
-    margin-right: 20px; /* Espace entre l'image et le titre */
+    border-radius: 10px; /* round border */
+    margin-right: 20px; /* space between image and title */
 }
 
-.artist-header .artist-name {
-    color: rgb(255, 255, 255); /* Texte en noir */
+.artist-header .artist-name { /* name of the artist inside the header */
+    color: rgb(255, 255, 255); 
     font-family: 'Helvetica', sans-serif;
     font-size: 2.5rem;
     color: rgb(255, 255, 255);
     padding-left: 150px;
-}
-
-
-
-.artist-info {
+}i
+.artist-info { /* outline of the artist information */
     padding: 2rem;
 }
 
@@ -153,7 +152,7 @@ body { /* background de la page  */
     margin-bottom: 2rem;
 }
 
-.info-title {
+.info-title { /* members and concerts in big font*/
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 1rem;
@@ -161,7 +160,7 @@ body { /* background de la page  */
     padding-bottom: 0.5rem;
 }
 
-.members-list {
+.members-list { /*member list of the band in a row */
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -174,20 +173,20 @@ body { /* background de la page  */
     border-radius: 20px;
 }
 
-.concerts-grid {
+.concerts-grid { /* display the concerts in a grid */
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /*adapt to the page*/
     gap: 1rem;
 }
 
-.concert-card {
+.concert-card { /* style of the concert card */
     background: #f8f9fa;
     padding: 1rem;
     border-radius: 10px;
 }
 
-/* Navigation styles */
-.navigation {
+
+.navigation { /*back button*/
     position: fixed;
     top: 1rem;
     left: 1rem;
@@ -209,13 +208,13 @@ body { /* background de la page  */
     background: #555;
 }
 
-.details {
+.details { /* creation date and first album */
     display: flex;
     gap: 2rem;
     margin-bottom: 1rem;
 }
-
-.detail {
+/*for each detail */
+.detail { 
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -233,22 +232,12 @@ body { /* background de la page  */
     border-radius: 5px;
     z-index: 1000;
 }
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-/* Style global de la barre de recherche */
+
+/* Global style for the search bar */
 .search-container {
     position: relative;
     width: 100%;
-    max-width: 700px; /* Allongement de la barre de recherche */
+    max-width: 700px; 
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -259,7 +248,7 @@ body { /* background de la page  */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Input de la barre de recherche */
+/* Inputof the searchbar */
 .search-input {
     width: 100%;
     padding: 1rem 1.5rem;
@@ -327,7 +316,8 @@ body { /* background de la page  */
 .home-link:focus {
     outline: none;
 }
-/* Error popup styles */
+
+/* Error popup styles, display only if incorrect is true */ 
 .popup {
     display: none; /* Hidden by default */
     position: fixed;
@@ -366,7 +356,7 @@ body { /* background de la page  */
     background: #c0392b;
 }
 
-/* Fade-in effect */
+/* Fade-in effect for the pop-up*/
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -390,7 +380,7 @@ body { /* background de la page  */
     z-index: 999;
 }   
 
-/* back to artist button, taking the same class ass other button didnt work */
+/* may turn this back on if needed 
 .back-button { 
     padding: 0.6rem 1.1rem;
     font-size: 1.3rem;
@@ -405,44 +395,4 @@ body { /* background de la page  */
 .back-button:hover {
     background: #c0392b;
     transform: scale(1.05);
-}
-/* Style pour la barre déroulante */
-.dropdown-container {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    max-height: 200px; /* Limite la hauteur de la liste déroulante */
-    overflow-y: auto; /* Ajoute une barre de défilement verticale */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.show {
-    display: block;
 }

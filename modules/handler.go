@@ -76,13 +76,6 @@ func MainPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func resetFilters() { //new function to reset the filter, added into SearchHandler
-	API.Filters.CD = CreationDate{}
-	API.Filters.FAD = FirstAlbumDate{}
-	API.Filters.NBOM = NumberOfMembers{}
-	API.Filters.City = []string{}
-}
-
 // SearchHandler - Handler for search
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/search" {
@@ -100,9 +93,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Réinitialiser les filtres
-	resetFilters()
-
 	// Retrieve form values
 	search := r.FormValue("search")             // Search by keyword
 	fromCreation := r.FormValue("fromCreation") // Filter: creation date (start)
@@ -112,8 +102,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	fromNBOM := r.FormValue("fromNBOM")         // Filter: minimum number of members
 	toNBOM := r.FormValue("toNBOM")             // Filter: maximum number of members
 	selectedCities := r.Form["cities"]          // Retrieve selected cities
-
-	log.Println("Form values:", search, fromCreation, toCreation, fromFAD, toFAD, fromNBOM, toNBOM, selectedCities)
 
 	// Convert dates to numbers
 	fromCDYear, errFromCD := strconv.Atoi(fromCreation)

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,16 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="/static/js/errorpopup.js"></script>
 </head>
+
 <body>
     <a href="/artists" class="home-link">Home</a>
     <div class="header">
         <h1>Artists</h1>
 
         <!-- Search bar -->
-        <form action="/search" method="POST" class="search-container" onsubmit="console.log('Form submitted');">
-            <input type="text" name="search" class="search-input" placeholder="Search an artist, an album, a concert" required />
+        <form action="/search" method="POST" class="search-container">
+            <input type="text" name="search" class="search-input"
+                placeholder="Search an artist, an album, a concert" required />
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
@@ -56,15 +59,17 @@
             </div>
             <div>
                 <h3>Filter by Concert Location</h3>
-                <div class="dropdown-container">
-                    <button type="button" onclick="toggleDropdown()" class="dropdown-button">Select City</button>
-                    <div id="dropdown" class="dropdown-content">
+                <div class="scrollable-filter">
+                    <ul style="margin: 0; padding: 0; list-style-type: none;">
                         {{ range .Filters.City }}
-                        <a href="#" onclick="selectCity('{{ . }}')">{{ . }}</a>
+                        <li>
+                            <input type="checkbox" name="cities" value="{{ . }}">
+                            {{ . }}
+                        </li>
                         {{ end }}
-                    </div>
+                    </ul>
                 </div>
-            </div>
+            
             <button type="submit" class="filter-button">Apply Filter</button>
         </form>
     </div>
@@ -95,27 +100,6 @@
         {{ end }}
         {{ end }}
     </div>
-
-    <script>
-        function toggleDropdown() {
-            document.getElementById("dropdown").classList.toggle("show");
-        }
-
-        function selectCity(city) {
-            // Logique pour sélectionner une ville
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.matches('.dropdown-button')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-    </script>
 </body>
+
 </html>
