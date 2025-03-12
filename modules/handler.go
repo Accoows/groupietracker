@@ -112,13 +112,13 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	toNBOMVal, errToNBOM := strconv.Atoi(toNBOM)
 
 	if errFromCD != nil {
-		fromCDYear = 1900
+		fromCDYear = 1958
 	}
 	if errToCD != nil {
 		toCDYear = 2024
 	}
 	if errFromFAD != nil {
-		fromFADYear = 1900
+		fromFADYear = 1958
 	}
 	if errToFAD != nil {
 		toFADYear = 2024
@@ -142,7 +142,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	filteredArtists = API.General.Artists
 
 	// Apply creation date filter if a value is provided
-	if fromCDYear > 1900 || toCDYear > 2024 {
+	if fromCDYear > 1958 || toCDYear > 2024 {
 		var tempArtists []Artist
 		for _, artist := range filteredArtists {
 			if artist.CreationDate >= fromCDYear && artist.CreationDate <= toCDYear {
@@ -153,7 +153,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Apply first album date filter if a value is provided
-	if fromFADYear > 1900 || toFADYear > 2024 {
+	if fromFADYear > 1958 || toFADYear > 2024 {
 		var tempArtists []Artist
 		for _, artist := range filteredArtists {
 			albumYear, err := strconv.Atoi(artist.FirstAlbum[len(artist.FirstAlbum)-4:]) // Extract the year
@@ -209,6 +209,28 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		API.Search = General{Artists: filteredArtists} // If no search, keep filtered results or display all artists
 	}
 
+	// Manage cities to keep the complete list
+	allCities := uniqueCities(API.General.Artists) // Retrieve all cities
+	selectedCityMap := make(map[string]bool)
+	for _, city := range selectedCities {
+		selectedCityMap[city] = true
+	}
+
+	// Organize cities: first the selected ones, then the rest
+	var updatedCities []string
+	for _, city := range allCities {
+		if selectedCityMap[city] {
+			updatedCities = append(updatedCities, city) // Put selected ones at the top
+		}
+	}
+	for _, city := range allCities {
+		if !selectedCityMap[city] {
+			updatedCities = append(updatedCities, city)
+		}
+	}
+
+	API.Filters.City = updatedCities // Update city display
+
 	// Save filters for display in the form
 	API.Filters.CD.From = fromCreation
 	API.Filters.CD.To = toCreation
@@ -216,7 +238,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	API.Filters.FAD.To = toFAD
 	API.Filters.NBOM.From = fromNBOM
 	API.Filters.NBOM.To = toNBOM
-	API.Filters.City = selectedCities
 
 	// Handle error display
 	if err = tpl.ExecuteTemplate(w, "artistsDisplay.html", API); err != nil {

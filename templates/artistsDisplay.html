@@ -10,14 +10,14 @@
 </head>
 
 <body>
-    <a href="/artists" class="home-link">Home</a>
+    <a href="/artists" class="home-link">Reset</a>
     <div class="header">
         <h1>Artists</h1>
 
         <!-- Search bar -->
         <form action="/search" method="POST" class="search-container">
-            <input type="text" name="search" class="search-input"
-                placeholder="Search an artist, an album, a concert" required />
+            <input type="text" name="search" class="search-input" placeholder="Search an artist, an album, a concert"
+                required />
             <button type="submit" class="search-button">Search</button>
         </form>
     </div>
@@ -32,35 +32,41 @@
         <button onclick="closePopup()">OK</button>
     </div>
     {{ end }}
-    
-    <!-- Filter container (always visible) -->
-    <div class="filter-container">
-        <form action="/search" method="POST">
-            <div>
-                <h3>Filter by Creation Date</h3>
-                <label for="fromCreation">From:</label>
-                <input type="number" name="fromCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.From }}">
-                <label for="toCreation">To:</label>
-                <input type="number" name="toCreation" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.CD.To }}">
-            </div>
-            <div>
-                <h3>First Album Date:</h3>
-                <label for="fromFAD">From:</label>
-                <input type="number" name="fromFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.From }}">
-                <label for="toFAD">To:</label>
-                <input type="number" name="toFAD" min="1900" max="2024" placeholder="YYYY" value="{{ .Filters.FAD.To }}">
-            </div>
-            <div>
-                <h3>Filter by Number of Members</h3>
-                <label for="fromNBOM">From:</label>
-                <input type="number" name="fromNBOM" min="1" max="8" placeholder="Min" value="{{ .Filters.NBOM.From }}">
-                <label for="toNBOM">To:</label>
-                <input type="number" name="toNBOM" min="1" max="8" placeholder="Max" value="{{ .Filters.NBOM.To }}">
-            </div>
-            <div>
-                <h3>Filter by Concert Location</h3>
-                <div class="scrollable-filter">
-                    <ul style="margin: 0; padding: 0; list-style-type: none;">
+
+    <!-- Conteneur principal qui inclut les filtres à gauche et la grille des artistes -->
+    <div class="main-container">
+        <!-- Barre latérale des filtres -->
+        <aside class="filter-container">
+            <form action="/search" method="POST">
+                <div>
+                    <h3>Filter by Creation Date</h3>
+                    <label for="fromCreation">From:</label>
+                    <input type="number" name="fromCreation" min="1900" max="2024" placeholder="YYYY"
+                        value="{{ .Filters.CD.From }}">
+                    <label for="toCreation">To:</label>
+                    <input type="number" name="toCreation" min="1900" max="2024" placeholder="YYYY"
+                        value="{{ .Filters.CD.To }}">
+                </div>
+                <div>
+                    <h3>First Album Date:</h3>
+                    <label for="fromFAD">From:</label>
+                    <input type="number" name="fromFAD" min="1900" max="2024" placeholder="YYYY"
+                        value="{{ .Filters.FAD.From }}">
+                    <label for="toFAD">To:</label>
+                    <input type="number" name="toFAD" min="1900" max="2024" placeholder="YYYY"
+                        value="{{ .Filters.FAD.To }}">
+                </div>
+                <div>
+                    <h3>Filter by Number of Members</h3>
+                    <label for="fromNBOM">From:</label>
+                    <input type="number" name="fromNBOM" min="1" max="8" placeholder="Min"
+                        value="{{ .Filters.NBOM.From }}">
+                    <label for="toNBOM">To:</label>
+                    <input type="number" name="toNBOM" min="1" max="8" placeholder="Max" value="{{ .Filters.NBOM.To }}">
+                </div>
+                <div>
+                    <h3>Filter by Concert Location</h3>
+                    <ul>
                         {{ range .Filters.City }}
                         <li>
                             <input type="checkbox" name="cities" value="{{ . }}">
@@ -69,36 +75,36 @@
                         {{ end }}
                     </ul>
                 </div>
-            
-            <button type="submit" class="filter-button">Apply Filter</button>
-        </form>
-    </div>
+                <button type="submit" class="filter-button">Apply Filter</button>
+            </form>
+        </aside>
 
-    <!-- List of artists (Search results or complete list) -->
-    <div class="grid">
-        {{ if .Search.Artists }}
-        {{ range .Search.Artists }}
-        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
-            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
-            <div class="artist-info">
-                <h2 class="artist-name">{{ .Name }}</h2>
-                <p class="artist-details">Creation : {{ .CreationDate }}</p>
-                <p class="artist-details">First album : {{ .FirstAlbum }}</p>
-            </div>
-        </button>
-        {{ end }}
-        {{ else }}
-        {{ range .General.Artists }}
-        <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
-            <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
-            <div class="artist-info">
-                <h2 class="artist-name">{{ .Name }}</h2>
-                <p class="artist-details">Creation : {{ .CreationDate }}</p>
-                <p class="artist-details">First album : {{ .FirstAlbum }}</p>
-            </div>
-        </button>
-        {{ end }}
-        {{ end }}
+        <!-- Liste des artistes -->
+        <div class="grid">
+            {{ if .Search.Artists }}
+            {{ range .Search.Artists }}
+            <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+                <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">{{ .Name }}</h2>
+                    <p class="artist-details">Creation : {{ .CreationDate }}</p>
+                    <p class="artist-details">First album : {{ .FirstAlbum }}</p>
+                </div>
+            </button>
+            {{ end }}
+            {{ else }}
+            {{ range .General.Artists }}
+            <button class="artist-card" onclick="location.href='/artist/{{ .ID }}';">
+                <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">{{ .Name }}</h2>
+                    <p class="artist-details">Creation : {{ .CreationDate }}</p>
+                    <p class="artist-details">First album : {{ .FirstAlbum }}</p>
+                </div>
+            </button>
+            {{ end }}
+            {{ end }}
+        </div>
     </div>
 </body>
 
