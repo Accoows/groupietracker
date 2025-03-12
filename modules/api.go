@@ -53,7 +53,6 @@ func ApiRequest(url string) []byte { // Retrieve data from the API
 func LoadArtistInfos(art *Artist, relation Relations) {
 
 	artistFirstAlbum := ChangeDatesCaracters(art.FirstAlbum)
-  
 	art.FirstAlbum = artistFirstAlbum
 
 	for _, rel := range relation.Index { // the index of relation is parcoured to compare the ID with the artist one
