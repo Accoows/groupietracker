@@ -18,7 +18,7 @@ body {
 }
 
 /* Main container */
-.hero {
+.main-container {
     max-width: 600px;
     padding: 2rem;
     background: rgba(0, 0, 0, 0.8);
@@ -43,7 +43,7 @@ body {
 }
 
 /* Return button */
-.cta-button {
+.returnerr-button {
     display: inline-block;
     padding: 1rem 2rem;
     font-size: 1.2rem;
@@ -54,7 +54,7 @@ body {
     transition: transform 0.3s, background 0.3s;
 }
 
-.cta-button:hover {
+.returnerr-button:hover {
     background: #c0392b;
     transform: scale(1.05);
 }

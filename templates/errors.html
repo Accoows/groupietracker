@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erreur {{.}}</title>
+    <title>Error {{.}}</title>
     <link rel="stylesheet" href="/static/css/errorstyle.css">
     <link rel="shortcut icon" href="/static/img/ico.png" type="image/x-icon">
 </head>
 <body>
-    <div class="hero">
-        <h1 class="errnum">Erreur {{.}}</h1>
+    <div class="main-container">
+        <h1 class="errnum">Error {{.}}</h1>
         
         {{ if eq . 404 }}
-        <p class="description">Oops... La page demandée n'existe pas.</p>
+        <p class="description">Oops... The requested page does not exist.</p>
         {{ else if eq . 405 }}
-        <p class="description">Méthode non autorisée. Vous ne pouvez pas utiliser cette méthode ici.</p>
+        <p class="description">Method not allowed. You cannot use this method here.</p>
         {{ else if eq . 400 }}
-        <p class="description">Requête incorrecte. Vérifiez votre saisie et réessayez.</p>
+        <p class="description">Bad request. Please check your input and try again.</p>
         {{ else if eq . 500 }}
-        <p class="description">Le serveur a rencontré une erreur. Ce n'est pas votre faute.</p>
+        <p class="description">The server encountered an error.</p>
         {{ else }}
-        <p class="description">Une erreur inattendue s'est produite.</p>
+        <p class="description">An unexpected error has occurred.</p>
         {{end}}
 
-        <a href="/artists" class="cta-button">Retour à l'accueil</a>
+        <a href="/artists" class="returnerr-button">Return to Homepage</a>
     </div>
 </body>
 </html>
