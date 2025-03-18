@@ -22,10 +22,14 @@ git clone https://github.com/ton-pseudo/groupie-tracker.git
 cd groupie-tracker
 ```
 
+---
+
 ### 2️⃣ **Exécuter le projet**
 ```bash
 go run main.go
 ```
+
+---
 
 ### 📜 Collaboration
 
